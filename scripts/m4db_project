@@ -1,0 +1,23 @@
+#!python
+
+from m4db_serverside.scripts.m4db_project.command_line_parser import command_line_parser
+from m4db_serverside.scripts.m4db_project.actions import list_projects_action
+from m4db_serverside.scripts.m4db_project.actions import set_project_action
+from m4db_serverside.scripts.m4db_project.actions import add_project_action
+
+def main():
+    parser = command_line_parser()
+    args = parser.parse_args()
+
+    if args.command == "list":
+        list_projects_action()
+
+    if args.command == "set":
+        set_project_action(args)
+
+    if args.command == "add":
+        add_project_action(args)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,21 @@
+#!python
+
+import sys
+
+from m4db_serverside.scripts.m4db_geometry.command_line_parser import command_line_parser
+from m4db_serverside.scripts.m4db_geometry.actions import new_geometry_action
+
+
+def main():
+    parser = command_line_parser()
+    args = parser.parse_args()
+
+    if args.command == "add":
+        try:
+            new_geometry_action(args)
+        except ValueError as e:
+            print(str(e))
+
+
+if __name__ == "__main__":
+    main()

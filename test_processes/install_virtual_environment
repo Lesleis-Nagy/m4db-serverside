@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Create a new virtual environment
+
+rm -rf /home/lnagy2/VirtualEnvs/nebss
+python -m venv /home/lnagy2/VirtualEnvs/nebss
+source /home/lnagy2/VirtualEnvs/nebss/bin/activate
+
+pip install --upgrade pip
+
+pip install -Iv psycopg2==2.9.1
+pip install -Iv SQLAlchemy==1.4.20
+pip install -Iv vtk==9.0.2
+pip install -Iv jinja2==3.0.1
+pip install -Iv PyYAML==5.4.1
+
+# Install m4db_database
+cd /work/projects/m4db/sources/m4db_database
+python setup.py install
+
+# Install m4db_serverside
+cd /work/projects/m4db_serverside
+python setup.py install

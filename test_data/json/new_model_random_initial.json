@@ -1,0 +1,16 @@
+[
+  {
+    "geometry": {
+      "name": "testgeom",
+      "size": 0.100
+    },
+    "materials": [
+      {
+        "name": "magnetite",
+        "temperature": 50.0,
+        "submesh_id": 1
+      }
+    ],
+    "start_magnetization": {"type": "random"}
+  }
+]

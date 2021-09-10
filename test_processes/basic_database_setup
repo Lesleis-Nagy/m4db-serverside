@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# This is a basic test that will,
+#   1) remove the 'm4db' database
+#   2) create a new empty 'm4db' database
+#   3) import basic data:
+#      3.1) anisotropy forms
+#      3.2) materials (iron and magnetite)
+#      3.3) physical constants
+#      3.4) units
+
+# Make sure we're using 'm4db_serverside'
+
+dropdb m4db
+rm -rf /work/projects/m4db/mmdatabase/file_root
+rm -rf /work/projects/m4db/mmdatabase/m4db.yaml
+
+createdb m4db -T m4db_template
+
+# Source the virtual environment
+source /home/lnagy2/VirtualEnvs/nebss/bin/activate
+
+# Initialize the database
+m4db_setup_database postgres m4db /work/projects/m4db/mmdatabase/file_root /work/projects/m4db/mmdatabase/m4db.yaml
+export M4DB_CONFIG=/work/projects/m4db/mmdatabase/m4db.yaml
+
+source /home/lnagy2/VirtualEnvs/nebss/bin/activate
+
+m4db_import_anisotropy_form /work/projects/m4db_serverside/test_data/json/anisotropy_form.json -d
+m4db_import_material /work/projects/m4db_serverside/test_data/json/material.json -d
+m4db_import_physical_constant /work/projects/m4db_serverside/test_data/json/physical_constant.json -d
+m4db_import_unit /work/projects/m4db_serverside/test_data/json/unit.json -d
+m4db_import_size_convention /work/projects/m4db_serverside/test_data/json/size_convention.json -d
+
+module load merrill/1.4
+m4db_set_micromagnetics_code merrill

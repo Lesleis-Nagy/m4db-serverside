@@ -1,0 +1,16 @@
+[
+    {
+        "created": "05/29/2020, 15:00:35",
+        "description": "Equivalent Spherical Volume Diameter",
+        "id": 1,
+        "last_modified": "05/29/2020, 15:00:35",
+        "symbol": "ESVD"
+    },
+    {
+        "created": "05/29/2020, 15:00:35",
+        "description": "Equivalent Cubic Volume Length",
+        "id": 2,
+        "last_modified": "05/29/2020, 15:00:35",
+        "symbol": "ECVL"
+    }
+]

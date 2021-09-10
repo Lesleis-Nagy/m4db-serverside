@@ -1,0 +1,19 @@
+#!python
+
+from m4db_serverside.scripts.m4db_software.command_line_parser import command_line_parser
+from m4db_serverside.scripts.m4db_software.actions import list_software_actions
+from m4db_serverside.scripts.m4db_software.actions import add_software_action
+
+
+def main():
+    parser = command_line_parser()
+    args = parser.parse_args()
+
+    if args.command == "list":
+        list_software_actions()
+    elif args.command == "add":
+        add_software_action(args)
+
+
+if __name__ == "__main__":
+    main()

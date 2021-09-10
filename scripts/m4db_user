@@ -1,0 +1,24 @@
+#!python
+
+from m4db_serverside.scripts.m4db_user.command_line_parser import command_line_parser
+from m4db_serverside.scripts.m4db_user.actions import list_users_action
+from m4db_serverside.scripts.m4db_user.actions import set_user_action
+from m4db_serverside.scripts.m4db_user.actions import add_user_action
+
+
+def main():
+    parser = command_line_parser()
+    args = parser.parse_args()
+
+    if args.command == "list":
+        list_users_action()
+
+    if args.command == "set":
+        set_user_action(args)
+
+    if args.command == "add":
+        add_user_action(args)
+
+
+if __name__ == "__main__":
+    main()

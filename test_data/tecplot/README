@@ -1,0 +1,8 @@
+## Files
+
+* magnetisation.tec          - is an example of the new multiphase magnetisation file, even geometries consisting of a
+                               single phase now use this tecplot file format.
+* magnetisation_old.tec      - is an example of the old single-phase magnetisation file. This file type only supports
+                               single-phase models and is deprecated.
+* magnetisation_plus_old.tec - this is an example of the old single-phase magnetisation file containing additional
+                               anisotropy direction of moments (ADM) and helicity information.

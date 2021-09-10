@@ -1,0 +1,16 @@
+[
+    {
+        "created": "05/29/2020, 15:00:35",
+        "description": "Anisotropy is in reference to (orthogonal) cubic axes",
+        "id": 1,
+        "last_modified": "05/29/2020, 15:00:35",
+        "name": "cubic"
+    },
+    {
+        "created": "05/29/2020, 15:00:35",
+        "description": "Anisotropy is along a single directional axis",
+        "id": 2,
+        "last_modified": "05/29/2020, 15:00:35",
+        "name": "uniaxial"
+    }
+]

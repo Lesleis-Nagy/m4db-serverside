@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Make sure to work on the correct virtual environment
+source /home/lnagy2/VirtualEnvs/nebss/bin/activate
+
+# Make sure to have the m4db_database configuration available
+export M4DB_CONFIG=/work/projects/m4db/mmdatabase/m4db.yaml
+
+# Create a user
+m4db_user add testuser read Test User test.user@email.com
+
+# Create a project
+m4db_project add testproject "some description of my project"
+
+# Create a software
+m4db_software add Trelis 16.4
+
+# Create a geometry
+m4db_geometry add testgeom 0.100 um ESVD /work/projects/m4db_serverside/test_data/patran/100nm.pat Trelis 16.4
+
+# Create 50 models
+#m4db_model --db-user=testuser --project=testproject add --json-file=/work/projects/m4db_serverside/test_data/json/new_model_random_initial.json --max-evals=10000 --reps=50

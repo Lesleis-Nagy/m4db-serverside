@@ -1,0 +1,65 @@
+[
+    {
+        "created": "05/29/2020, 15:00:35",
+        "id": 1,
+        "last_modified": "05/29/2020, 15:00:35",
+        "name": "vaccum permeability/permeability of free space",
+        "symbol": "mu0",
+        "unit": "H/m",
+        "value": 1.25663706143592e-06
+    },
+    {
+        "created": "05/29/2020, 15:00:35",
+        "id": 2,
+        "last_modified": "05/29/2020, 15:00:35",
+        "name": "vaccum permittivity/permittivity of free space",
+        "symbol": "ep0",
+        "unit": "F/m",
+        "value": 8.854187817e-12
+    },
+    {
+        "created": "05/29/2020, 15:00:35",
+        "id": 3,
+        "last_modified": "05/29/2020, 15:00:35",
+        "name": "Coulomb's constant",
+        "symbol": "Ke",
+        "unit": "(Kg m^3)/(s^4 A^2)",
+        "value": 8987551787.36818
+    },
+    {
+        "created": "05/29/2020, 15:00:35",
+        "id": 4,
+        "last_modified": "05/29/2020, 15:00:35",
+        "name": "Boltzmann constant",
+        "symbol": "Kb",
+        "unit": "(m^2 kg)/(s^2 K)",
+        "value": 1.38064852e-23
+    },
+    {
+        "created": "05/29/2020, 15:00:35",
+        "id": 5,
+        "last_modified": "05/29/2020, 15:00:35",
+        "name": "speed of light in a vacuum",
+        "symbol": "c",
+        "unit": "m/s",
+        "value": 299792458.0
+    },
+    {
+        "created": "05/29/2020, 15:00:35",
+        "id": 6,
+        "last_modified": "05/29/2020, 15:00:35",
+        "name": "Newton's gravitational constant",
+        "symbol": "G",
+        "unit": "(m^3)/(Kg s)",
+        "value": 6.6740831e-11
+    },
+    {
+        "created": "05/29/2020, 15:00:35",
+        "id": 7,
+        "last_modified": "05/29/2020, 15:00:35",
+        "name": "Plank's constant",
+        "symbol": "h",
+        "unit": "J s",
+        "value": 6.62607004081e-34
+    }
+]
