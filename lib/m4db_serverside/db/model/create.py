@@ -1,7 +1,7 @@
-from m4db_database.orm import Model
-from m4db_database.orm import Metadata
-from m4db_database.orm import ModelRunData
-from m4db_database.orm import ModelReportData
+from m4db_database.orm.latest import Model
+from m4db_database.orm.latest import Metadata
+from m4db_database.orm.latest import ModelRunData
+from m4db_database.orm.latest import ModelReportData
 
 from m4db_serverside.db.geometry.retrieve import retrieve_geometry
 from m4db_serverside.db.model_material_associations.create import create_model_material_associations

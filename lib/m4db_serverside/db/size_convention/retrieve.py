@@ -2,7 +2,7 @@ r"""
 A collection of routines to retrieve size conventions from m4db.
 """
 
-from m4db_database.orm import SizeConvention
+from m4db_database.orm.latest import SizeConvention
 
 
 def allowed_size_conventions():

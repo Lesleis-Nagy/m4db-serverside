@@ -4,15 +4,12 @@ Perform various m4db project related actions.
 
 import sys
 
-from m4db_database.orm import Project
-
+from m4db_database.orm.latest import Project
+from m4db_database.configuration import read_config_from_environ
+from m4db_database.configuration import write_config_to_environ
 from m4db_database.sessions import get_session
 
-from m4db_serverside.configuration import read_config_from_environ
-from m4db_serverside.configuration import write_config_to_environ
 from m4db_serverside.db.project.create import create_project
-
-from m4db_serverside import global_vars
 
 
 def list_projects_action():
@@ -47,27 +44,12 @@ def set_default_project_action(args):
     """
     project = args.project
 
-    try:
-        ss_config = read_config_from_environ()
-    except ValueError as e:
-        print(str(e))
-        sys.exit(1)
-    except FileNotFoundError as e:
-        print(str(e))
-        print("Is the environment variable '{}' pointing to a file that exists?".format(
-            global_vars.m4db_serverside_config_environment_variable
-        ))
-        sys.exit(1)
+    config = read_config_from_environ()
 
     # If force is true, just update and don't bother querying the database.
     if args.force:
-        # If ss_config is None, inform the project and exit
-        if ss_config is None:
-            print("There is no default configuration defined, make sure '{}' is set to a valid "
-                  "configuration file.".format(global_vars.m4db_serverside_config_environment_variable))
-            sys.exit(1)
-        ss_config["project"] = args.project
-        write_config_to_environ(ss_config)
+        config["m4db_serverside"]["default_m4db_project"] = args.project
+        write_config_to_environ(config)
         return
 
     # Get a session to the database.
@@ -85,13 +67,8 @@ def set_default_project_action(args):
         session.close()
         sys.exit()
     else:
-        # ... update (as long as global_vars.m4db_serverside_config_environment_variable exists)
-        if ss_config is None:
-            print("There is no default configuration defined, make sure '{}' is set to a valid "
-                  "configuration file.".format(global_vars.m4db_serverside_config_environment_variable))
-            sys.exit(1)
-        ss_config["project"] = args.project
-        write_config_to_environ(ss_config)
+        config["m4db_serverside"]["default_m4db_project"] = args.project
+        write_config_to_environ(config)
         session.close()
         return
 

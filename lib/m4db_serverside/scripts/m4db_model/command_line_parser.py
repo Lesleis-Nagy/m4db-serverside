@@ -1,7 +1,6 @@
 from argparse import ArgumentParser
 
 import m4db_database.configuration
-import m4db_serverside.configuration
 
 
 def new_model_subparser(subparsers):
@@ -39,7 +38,6 @@ def command_line_parser():
     new_model_subparser(subparsers)
 
     config = m4db_database.configuration.read_config_from_environ()
-    ss_config = m4db_serverside.configuration.read_config_from_environ()
 
     # Set config
     parser.add_argument("--software", default=config["mm_type"],
@@ -49,14 +47,8 @@ def command_line_parser():
                             config["mm_binary_version"]))
 
     # If ss_config was found ...
-    if ss_config is not None:
-        # ... set db_user & project to the values read from the config file.
-        db_user = ss_config["db_user"]
-        project = ss_config["project"]
-    else:
-        # ... otherwise set the db_user & project to None - the user must then specify these.
-        db_user = None
-        project = None
+    db_user = config["m4db_serverside"]["default_m4db_user"]
+    project = config["m4db_serverside"]["default_m4db_project"]
 
     parser.add_argument("--db-user", default=db_user,
                         help="override the default m4db user (default: '{}')".format(db_user))

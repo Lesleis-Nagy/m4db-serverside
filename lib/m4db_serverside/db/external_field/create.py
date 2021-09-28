@@ -2,8 +2,8 @@ r"""
 A collection of routines to create external field objects
 """
 
-from m4db_database.orm import Unit
-from m4db_database.orm import UniformField
+from m4db_database.orm.latest import Unit
+from m4db_database.orm.latest import UniformField
 
 
 def create_external_field(session, json_model_dict):

@@ -2,7 +2,7 @@ r"""
 A collection of routines to retrieve units from m4db.
 """
 
-from m4db_database.orm import Unit
+from m4db_database.orm.latest import Unit
 
 
 def allowed_size_units():

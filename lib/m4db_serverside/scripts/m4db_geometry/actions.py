@@ -5,7 +5,7 @@ A collection of routines to add geometries to the database.
 import os
 import shutil
 
-from m4db_database.orm import Geometry
+from m4db_database.orm.latest import Geometry
 
 from m4db_database.sessions import get_session
 

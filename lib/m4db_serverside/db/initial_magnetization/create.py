@@ -2,10 +2,10 @@ r"""
 A collection of routines to create model initial start fields.
 """
 
-from m4db_database.orm import Model
-from m4db_database.orm import RandomField
-from m4db_database.orm import UniformField
-from m4db_database.orm import ModelField
+from m4db_database.orm.latest import Model
+from m4db_database.orm.latest import RandomField
+from m4db_database.orm.latest import UniformField
+from m4db_database.orm.latest import ModelField
 
 
 def create_initial_magnetization(session, json_model_dict):

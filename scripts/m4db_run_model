@@ -1,3 +1,5 @@
+#!python
+
 from argparse import ArgumentParser
 
 from m4db_database.configuration import read_config_from_environ

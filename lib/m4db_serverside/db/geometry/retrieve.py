@@ -2,9 +2,9 @@ r"""
 A collection of functions that retrieve geometries from the database.
 """
 
-from m4db_database.orm import SizeConvention
-from m4db_database.orm import Unit
-from m4db_database.orm import Geometry
+from m4db_database.orm.latest import SizeConvention
+from m4db_database.orm.latest import Unit
+from m4db_database.orm.latest import Geometry
 
 
 def retrieve_geometry(session, json_model_dict):

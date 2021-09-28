@@ -2,8 +2,8 @@ import sys
 
 import yaml
 
-from m4db_database.orm import DBUser
-from m4db_database.orm import Project
+from m4db_database.orm.latest import DBUser
+from m4db_database.orm.latest import Project
 
 from m4db_database.sessions import get_session
 

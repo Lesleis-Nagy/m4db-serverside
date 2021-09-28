@@ -2,7 +2,7 @@ r"""
 Perform various m4db software related command actions.
 """
 
-from m4db_database.orm import Software
+from m4db_database.orm.latest import Software
 
 from m4db_database.sessions import get_session
 

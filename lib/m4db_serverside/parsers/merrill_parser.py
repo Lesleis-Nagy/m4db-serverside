@@ -1,7 +1,5 @@
 import re
 
-from argparse import ArgumentParser
-
 
 def parse_merrill_stdout(str_stdout):
     r"""

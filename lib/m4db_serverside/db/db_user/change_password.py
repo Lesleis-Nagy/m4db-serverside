@@ -2,7 +2,7 @@ r"""
 A selection of utilities used for changing user passwords.
 """
 
-from m4db_database.orm import DBUser
+from m4db_database.orm.latest import DBUser
 
 from m4db_serverside.utilities.password import password_hash
 

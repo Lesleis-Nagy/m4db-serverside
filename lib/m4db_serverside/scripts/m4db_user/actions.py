@@ -6,19 +6,16 @@ import sys
 
 from getpass import getpass
 
-from m4db_database.orm import DBUser
+from m4db_database.orm.latest import DBUser
+from m4db_database.configuration import read_config_from_environ
+from m4db_database.configuration import write_config_to_environ
 
 from m4db_database.sessions import get_session
-
-from m4db_serverside.configuration import read_config_from_environ
-from m4db_serverside.configuration import write_config_to_environ
 
 from m4db_serverside.db.db_user.change_password import change_password_admin
 from m4db_serverside.db.db_user.create import create_db_user
 
 from m4db_serverside.utilities.access_levels import string_to_access_level
-
-from m4db_serverside import global_vars
 
 
 def list_users_action():
@@ -55,27 +52,13 @@ def set_default_user_action(args):
     :param args: command line arguments object.
     :return: None
     """
-    try:
-        ss_config = read_config_from_environ()
-    except ValueError as e:
-        print(str(e))
-        sys.exit(1)
-    except FileNotFoundError as e:
-        print(str(e))
-        print("Is the environment variable '{}' pointing to a file that exists?".format(
-            global_vars.m4db_serverside_config_environment_variable
-        ))
-        sys.exit(1)
+
+    config = read_config_from_environ()
 
     # If force is true, just update and don't bother querying the database.
     if args.force:
-        # If ss_config is None, inform the user and exit
-        if ss_config is None:
-            print("There is no default configuration defined, make sure '{}' is set to a valid "
-                  "configuration file.".format(global_vars.m4db_serverside_config_environment_variable))
-            sys.exit(1)
-        ss_config["db_user"] = args.db_user
-        write_config_to_environ(ss_config)
+        config["m4db_serverside"]["default_m4db_user"] = args.db_user
+        write_config_to_environ(config)
         return
 
     # Get a session to the database.
@@ -93,12 +76,8 @@ def set_default_user_action(args):
         sys.exit()
     else:
         # ... update (as long as global_vars.m4db_serverside_config_environment_variable exists)
-        if ss_config is None:
-            print("There is no default configuration defined, make sure '{}' is set to a valid "
-                  "configuration file.".format(global_vars.m4db_serverside_config_environment_variable))
-            sys.exit(1)
-        ss_config["db_user"] = args.db_user
-        write_config_to_environ(ss_config)
+        config["m4db_serverside"]["default_m4db_user"] = args.db_user
+        write_config_to_environ(config)
         session.close()
         return
 

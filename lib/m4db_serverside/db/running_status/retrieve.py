@@ -2,7 +2,7 @@ r"""
 A collection of routines for retrieving running statuses.
 """
 
-from m4db_database.orm import RunningStatus
+from m4db_database.orm.latest import RunningStatus
 
 from m4db_serverside import global_vars
 
