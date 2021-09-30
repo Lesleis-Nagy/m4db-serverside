@@ -26,6 +26,10 @@ class global_vars:
     model_stdout_file_name = "model_stdout.txt"
     model_stderr_file_name = "model_stderr.txt"
 
+    neb_merrill_script_file_name = "neb_script.merrill"
+    neb_stdout_file_name = "neb_stdout.txt"
+    neb_stderr_file_name = "neb_stderr.txt"
+
     neb_tecplot_file_name = "neb.tec"
 
     running_status_not_run = "not-run"

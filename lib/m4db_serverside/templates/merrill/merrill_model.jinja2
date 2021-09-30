@@ -7,12 +7,12 @@ Set MaxEnergyEvaluations {{ model.max_evals }}
 {{ model.minimizer }}
 Set ExchangeCalculator {{ model.exchange_calculator }}
 
-{% if model.initial_field.type == "random" %}
+{% if model.start_magnetization.type == "random" %}
 Randomize All Moments
-{% elif model.initial_field.type == "uniform" %}
-Uniform Magnetization {{ model.initial_field.x }} {{ model.initial_field.y }} {{ model.initial_field.z }}
-{% elif model.initial_field.type == "model" %}
-ReadMagnetization {{ model.initial_field.dat_file }}
+{% elif model.start_magnetization.type == "uniform" %}
+Uniform Magnetization {{ model.start_magnetization.x }} {{ model.start_magnetization.y }} {{ model.start_magnetization.z }}
+{% elif model.start_magnetization.type == "model" %}
+ReadMagnetization {{ model.start_magnetization.dat_file }}
 {% endif %}
 
 {% for material in model.materials %}
@@ -23,8 +23,8 @@ setsubdomain {{ material.submesh_id }} AEX {{ material.aex }}
 {% endfor %}
 
 EnergyLog {{ model.energy_log_file }}
-External Field Strength {{ model.ambient_field.strength }} {{ model.ambient_field.unit }}
-External Field Direction {{ model.ambient_field.x }} {{ model.ambient_field.y }} {{ model.ambient_field.z }}
+External Field Strength {{ model.external_field.strength }} {{ model.external_field.unit }}
+External Field Direction {{ model.external_field.x }} {{ model.external_field.y }} {{ model.external_field.z }}
 
 Minimize
 WriteMagnetization {{ model.output }}

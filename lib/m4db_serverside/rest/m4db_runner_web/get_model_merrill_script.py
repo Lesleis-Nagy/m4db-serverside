@@ -1,0 +1,104 @@
+r"""
+A service to generate a script to run a model.
+"""
+import os
+
+from m4db_database.configuration import read_config_from_environ
+from m4db_database.utilities import uid_to_dir
+
+from m4db_database.orm.latest import Model
+from m4db_database.orm.latest import RandomField
+from m4db_database.orm.latest import UniformField
+from m4db_database.orm.latest import ModelField
+
+from m4db_serverside import global_vars
+from m4db_serverside.templates import template_env
+
+
+class GetModelMerrillScript:
+
+    def on_get(self, req, resp, unique_id):
+        r"""
+        Get/generate a script to run a model.
+        :param req: request object.
+        :param resp: response object.
+        :param unique_id: the unique identifier of a model.
+        :return: None.
+        """
+        config = read_config_from_environ()
+
+        # Retrieve associated runner data.
+        model = self.session.query(Model).\
+            filter(Model.unique_id == unique_id).one()
+
+        # Runner data.
+
+        runner_data = {}
+
+        runner_data["mesh_file"] = os.path.join(
+            config["file_root"],
+            global_vars.geometry_directory_name,
+            uid_to_dir(model.geometry.unique_id),
+            global_vars.geometry_patran_file_name
+        )
+
+        runner_data["max_evals"] = model.max_energy_evaluations
+
+        runner_data["minimizer"] = "ConjugateGradient"
+        runner_data["exchange_calculator"] = "1"
+
+        if isinstance(model.start_magnetization, RandomField):
+            runner_data["start_magnetization"] = {
+                "type": "random"
+            }
+        elif isinstance(model.start_magnetization, UniformField):
+            runner_data["start_magnetization"] = {
+                "type": "uniform",
+                "x": model.start_magnetization.dir_x,
+                "y": model.start_magnetization.dir_y,
+                "z": model.start_magnetization.dir_z
+            }
+        elif isinstance(model.start_magnetization, ModelField):
+            runner_data["start_magnetization"] = {
+                "type": "model",
+                "dat_file": os.path.join(
+                    config["file_root"],
+                    global_vars.model_directory_name,
+                    uid_to_dir(model.start_magnetization.model.unique_id),
+                    global_vars.magnetization_dat_file_name
+                )
+            }
+
+        materials = []
+        for mma in model.materials:
+            materials.append({
+                "submesh_id": mma.submesh_id,
+                "name": mma.material.name,
+                "temperature": mma.material.temperature,
+                "ms": mma.material.ms,
+                "k1": mma.material.k1,
+                "aex": mma.material.aex
+            })
+        runner_data["materials"] = materials
+
+        runner_data["energy_log_file"] = global_vars.energy_log_file_name
+
+        runner_data["external_field"] = {
+            "strength": 0.0,
+            "x": -1.0,
+            "y": -1.0,
+            "z": -1.0
+        }
+        if model.external_field:
+            runner_data["external_field"]["strength"] = model.external_field.magnitude
+            runner_data["external_field"]["x"] = model.external_field.dir_x
+            runner_data["external_field"]["y"] = model.external_field.dir_y
+            runner_data["external_field"]["z"] = model.external_field.dir_z
+
+        runner_data["output"] = global_vars.magnetization_output_file_name
+
+        merrill_template = template_env("merrill").get_template("merrill_model.jinja2")
+
+        resp.content_type = "text/plain"
+        resp.downloadable_as = global_vars.model_merrill_script_file_name
+        resp.body = merrill_template.render(model=runner_data)

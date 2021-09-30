@@ -5,7 +5,7 @@ A collection of routines for managing Falcon middleware.
 
 class SQLAlchemySessionManager:
     """
-    Create a scoped session for every request and close it when the request
+    Create a scoped database session for every request and close it when the request
     ends.
     """
 
