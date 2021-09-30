@@ -35,6 +35,8 @@ class SetModelQuants:
             model.vz_tot = parameters["vz_tot"]
         if "h_tot" in parameters.keys():
             model.h_tot = parameters["h_tot"]
+        if "rh_tot" in parameters.keys():
+            model.rh_tot = parameters["rh_tot"]
         if "adm_tot" in parameters.keys():
             model.adm_tot = parameters["adm_tot"]
         if "e_typical" in parameters.keys():

@@ -1,22 +1,13 @@
 #!python
 
-from argparse import ArgumentParser
-
-from m4db_database.configuration import read_config_from_environ
-
-
-def command_line_parser():
-    parser = ArgumentParser()
-
-    parser.add_argument("unique_id", help="The unique id of the model to run")
-
-    return parser
+from m4db_serverside.scripts.m4db_run_model.command_line_parser import command_line_parser
+from m4db_serverside.scripts.m4db_run_model.actions import run_model
 
 
 def main():
-    config = read_config_from_environ()
     parser = command_line_parser()
     args = parser.parse_args()
+    run_model(args)
 
 
 if __name__ == "__main__":
