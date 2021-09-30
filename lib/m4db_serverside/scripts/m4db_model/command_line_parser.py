@@ -40,16 +40,17 @@ def command_line_parser():
     config = m4db_database.configuration.read_config_from_environ()
 
     # Set config
-    parser.add_argument("--software", default=config["mm_type"],
-                        help="override the current micromagnetics software (default: {})".format(config["mm_type"]))
-    parser.add_argument("--software-version", default=config["mm_binary_version"],
-                        help="override the current micromagnetics software version (default: {})".format(
-                            config["mm_binary_version"]))
+    software = config["m4db_serverside"]["default_micromag_software"]
+    software_version = config["m4db_serverside"]["default_micromag_software_version"]
+
+    parser.add_argument("--software", default=software,
+                        help="override the current micromagnetics software (default: {})".format(software))
+    parser.add_argument("--software-version", default=software_version,
+                        help="override the current micromagnetics software version (default: {})".format(software_version))
 
     # If ss_config was found ...
     db_user = config["m4db_serverside"]["default_m4db_user"]
     project = config["m4db_serverside"]["default_m4db_project"]
-
     parser.add_argument("--db-user", default=db_user,
                         help="override the default m4db user (default: '{}')".format(db_user))
     parser.add_argument("--project", default=project,

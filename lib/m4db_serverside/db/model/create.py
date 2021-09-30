@@ -49,7 +49,7 @@ def create_model(session, json_model_dict, user_name, project_name, software_nam
         )
 
         # Create model material text data
-        mma = create_model_materials_text(json_model_dict, session)
+        mma = create_model_materials_text(json_model_dict)
 
         # Build the new model and save it to the database
         model = Model(

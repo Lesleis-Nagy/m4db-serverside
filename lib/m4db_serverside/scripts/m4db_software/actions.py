@@ -7,6 +7,7 @@ from m4db_database.orm.latest import Software
 from m4db_database.sessions import get_session
 
 from m4db_serverside.db.software.create import create_software
+from m4db_serverside.db.software.retrieve import retrieve_software
 
 
 def list_software_actions():
@@ -44,10 +45,37 @@ def add_software_action(args):
     session = get_session(nullpool=True)
 
     try:
-        software = create_software(session, args.name, args.version, args.description, args.url, args.citation)
+        software = create_software(session, args.name, args.version, args.executable, args.description, args.url, args.citation)
         session.add(software)
         session.commit()
     except ValueError as exception_obj:
         print(str(exception_obj))
     finally:
         session.close()
+
+
+def update_software_action(args):
+    r"""
+    Updates some of a software's data items
+    :param args: command line arguments
+    :return: None
+    """
+    session = get_session(nullpool=True)
+
+    try:
+        software = retrieve_software(session, args.name, args.version)
+        if args.executable:
+            software.executable = args.executable
+        if args.description:
+            software.description = args.description
+        if args.url:
+            software.url = args.url
+        if args.citation:
+            software.citation = args.citation
+        session.commit()
+    except ValueError as exception_obj:
+        print(str(exception_obj))
+    finally:
+        session.close()
+
+

@@ -11,7 +11,19 @@ def retrieve_geometry(session, json_model_dict):
     r"""
     Retrieve a geometry from the session given a JSON model dictionary.
     :param session: a database session.
-    :param json_model_dict: python dictionary (parsed from JSON) holding information about our model.
+    :param json_model_dict: python dictionary (parsed from JSON) holding information about our model, this
+                            function focuses on the JSON part
+                            {
+                                ...
+                                "geometry": {
+                                    "name": <string>,
+                                    "size": <decimal>,
+                                    "size_convention": <string>,
+                                    "size_unit": <string>
+                                }
+                                ...
+                            }
+
     :return: an existing Geometry object.
     """
     geometry = None

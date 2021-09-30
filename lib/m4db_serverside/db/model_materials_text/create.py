@@ -8,7 +8,19 @@ from m4db_database.orm.latest import ModelMaterialsText
 def create_model_materials_text(json_model_dict, sep=","):
     r"""
     Retrieve a collection of model material associations from the database.
-    :param json_model_dict: python dictionary (from JSON) holding information about our model.
+    :param json_model_dict: python dictionary (from JSON) holding information about our model. this
+                            function focuses on the JSON part
+                            {
+                                ...
+                                "materials": [
+                                    {
+                                        "name": <string>,
+                                        "temperature": <decimal>,
+                                        "submesh_id": <integer>
+                                    }
+                                ]
+                                ...
+                            }
     :param sep: separator character (default ',')
     :return: a ModelMaterialsText object.
     """

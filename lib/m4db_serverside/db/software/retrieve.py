@@ -27,6 +27,6 @@ def retrieve_software(session, software_name, software_version, allow_none=False
         else:
             # ... otherwise raise error
             raise ValueError(
-                "New model software {} (version: {}) cannot be found.".format(software_name, software_version))
+                "Software {} (version: {}) cannot be found.".format(software_name, software_version))
 
     return software

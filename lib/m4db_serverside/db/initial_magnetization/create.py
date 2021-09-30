@@ -12,7 +12,41 @@ def create_initial_magnetization(session, json_model_dict):
     r"""
     Create a field to be used as a start field for a micromagnetic model.
     :param session: a database session.
-    :param json_model_dict: python dictionary (from JSON) holding information about our model.
+    :param json_model_dict: python dictionary (from JSON) holding information about our model,
+                            this function focuses on the initial magnetization part
+
+                            {
+                                ...
+                                "start_magnetization": {
+                                    "type": "random",
+                                    ["seed": <int>]
+                                }
+                                ...
+                            }
+
+                            or
+
+                            {
+                                ...
+                                "start_magnetization": {
+                                    "type": "uniform",
+                                    "x_direction": <float>,
+                                    "y_direction": <float>,
+                                    "z_direction": <float>
+                                }
+                                ...
+                            }
+
+                            or
+
+                            {
+                                ...
+                                "start_magnetization": {
+                                    "type": "existing_model",
+                                    "unique_id": <uuid>
+                                }
+                                ...
+                            }
     :return: a new Field object.
     """
     start_magnetization = None

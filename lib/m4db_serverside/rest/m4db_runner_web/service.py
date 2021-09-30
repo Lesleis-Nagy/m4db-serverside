@@ -5,6 +5,9 @@ from m4db_database.sessions import get_session
 from m4db_serverside.rest.middleware import SQLAlchemySessionManager
 
 from m4db_serverside.rest.m4db_runner_web.is_alive import IsAlive
+
+from m4db_serverside.rest.m4db_runner_web.get_software_executable import GetSoftwareExecutable
+
 from m4db_serverside.rest.m4db_runner_web.set_model_running_status import SetModelRunningStatus
 from m4db_serverside.rest.m4db_runner_web.set_model_quants import SetModelQuants
 from m4db_serverside.rest.m4db_runner_web.get_model_merrill_script import GetModelMerrillScript
@@ -19,6 +22,13 @@ app = falcon.API(
     middleware=[
         SQLAlchemySessionManager(Session)
     ]
+)
+
+# Service to retrieve a software executable.
+get_software_executable = GetSoftwareExecutable()
+app.add_route(
+    "/get_software_executable/{name}/{version}",
+    get_software_executable
 )
 
 # IsAlive service.

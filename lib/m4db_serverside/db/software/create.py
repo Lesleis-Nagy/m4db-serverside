@@ -5,12 +5,13 @@ A selection of routines for creating software objects.
 from m4db_database.orm.latest import Software
 
 
-def create_software(session, name, version, description, url, citation):
+def create_software(session, name, version, executable, description, url, citation):
     r"""
     Create a new software object
     :param session: a database session.
     :param name: the name of the software.
     :param version: the version
+    :param executable: the executable
     :param description: a description of the software
     :param url: a url to find the software
     :param citation: a citation or DOI
@@ -28,6 +29,7 @@ def create_software(session, name, version, description, url, citation):
     software = Software(
         name=name,
         version=version,
+        executable=executable,
         description=description,
         url=url,
         citation=citation

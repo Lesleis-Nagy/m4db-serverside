@@ -10,7 +10,22 @@ def create_external_field(session, json_model_dict):
     r"""
     Create a field to be used as the external field for a micromagnetic model.
     :param session: a database session.
-    :param json_model_dict: python dictionary (from JSON) holding information about our model.
+    :param json_model_dict: python dictionary (from JSON) holding information about our model, this function
+                            focuses on the JSON part
+                            {
+                                ...
+                                "external_field": {
+                                    "x_direction": <float>,
+                                    "y_direction": <float>,
+                                    "z_direction": <float>,
+                                    "strength": <float>,
+                                    "unit": <float>
+                                }
+                                ...
+                            }
+                            Note: 1) external field unit defaults to uT,
+                                  2) the external field entry is entirely optional.
+
     :return: a new UniformField object or None.
     """
     external_field = None
