@@ -19,7 +19,7 @@ class TestFieldCalculations(unittest.TestCase):
 
     def test_write_vorticity_helicity_adm_to_vtk(self):
         ug = tec_to_unstructured_grid("../test_data/tecplot/magnetization.tec")
-        write_vorticity_helicity_adm_to_vtk(ug, "../test_data/tecplot/magnetization_plus.vtu")
+        write_vorticity_helicity_adm_to_vtk(ug, "../../test_data/tecplot/magnetization_plus.vtu")
 
 
 if __name__ == "__main__":

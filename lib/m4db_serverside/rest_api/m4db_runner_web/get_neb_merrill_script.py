@@ -2,6 +2,8 @@ r"""
 An API call that will retrieve MERRILL neb scripts.
 """
 
+import json
+
 from m4db_database.configuration import read_config_from_environ
 
 from m4db_serverside.rest_api.sessions import get_session
@@ -23,5 +25,7 @@ def get_neb_merrill_script(unique_id, output_file):
     session = get_session()
     response = session.get(service_url, verify=False)
     response.raise_for_status()
+
+    output = json.loads(response.text)
     with open(output_file, "bw") as fout:
-        fout.write(response.content)
+        fout.write(output["return"])

@@ -7,7 +7,7 @@ from collections import OrderedDict
 # Regular expressions used to parse multi-zone data.
 regex_title = re.compile(r"TITLE\s*=\s*\"(.*)\"")
 regex_variables = re.compile(r"VARIABLES\s*=\s*(\"[a-zA-Z]+\"(\s*,\s*\"[a-zA-Z]+\")*)")
-regex_zone = re.compile(r"ZONE T\s*=\s*\"([a-zA-Z0-9\.\s]*)\"")
+regex_zone = re.compile(r"ZONE T\s*=\s*\"([a-zA-Z0-9\.\s\-]*)\"")
 regex_nvert = re.compile(r"N\s*=\s*([0-9]+)")
 regex_nelem = re.compile(r"E\s*=\s*([0-9]+)")
 regex_f = re.compile(r"F\s*=\s*(POINT|BLOCK|FEPOINT|FEBLOCK)")
@@ -85,7 +85,7 @@ class ZoneData:
 def read_zone_metadata(tecplot_file):
     r"""
     Find the start point of all data for each zone.
-    :param tecplot_file:
+    :param tecplot_file: file containing magnetic information.
     :return:
     """
     zones_data = []
@@ -187,13 +187,17 @@ def read_zone(tecplot_file, zone_metadata, index_offset=-1):
 
 def read_tecplot(tecplot_file):
     header_data = read_header(tecplot_file)
+
+    # Zones_metadata contains a bunch of ZoneData objects.
     zones_metadata = read_zone_metadata(tecplot_file)
     fields = []
+    field_titles = []
     vertices = None
     elements = None
     submesh_idxs = None
     for zone_metadata in zones_metadata:
         v, f, sidxs, eidxs = read_zone(tecplot_file, zone_metadata)
+        field_titles.append(zone_metadata.t)
         if zone_metadata.is_first:
             fields.append(np.array(f, dtype=np.float64))
             vertices = np.array(v, dtype=np.float64)
@@ -203,6 +207,7 @@ def read_tecplot(tecplot_file):
             fields.append(np.array(f, dtype=np.float64))
     return {
         "fields": fields,
+        "field_titles": field_titles,
         "vertices": vertices,
         "elements": elements,
         "submesh_idxs": submesh_idxs,

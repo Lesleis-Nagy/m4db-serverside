@@ -1,6 +1,7 @@
 r"""
 An API call that will retrieve the software executable associated with a Model.
 """
+import json
 
 from m4db_database.configuration import read_config_from_environ
 
@@ -22,4 +23,6 @@ def get_model_software_executable(unique_id):
     session = get_session()
     response = session.get(service_url, verify=False)
     response.raise_for_status()
-    return response.text
+
+    output = json.loads(response.text)
+    return output["return"]

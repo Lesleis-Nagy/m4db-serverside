@@ -1,6 +1,8 @@
 r"""
 A service to generate a script to run an NEB model.
 """
+
+import json
 import os
 
 from m4db_database.configuration import read_config_from_environ
@@ -151,6 +153,4 @@ class GetNEBMerrillScript:
             runner_data = runner_data_without_parent(neb)
             merrill_template = template_env("merrill").get_template("merrill_neb_root_path.jinja2")
 
-        resp.content_type = "text/plain"
-        resp.downloadable_as = global_vars.neb_merrill_script_file_name
-        resp.body = merrill_template.render(neb=runner_data)
+        resp.body = json.dumps({"return": merrill_template.render(neb=runner_data)})

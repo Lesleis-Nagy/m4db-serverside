@@ -1,6 +1,8 @@
 r"""
 A service to generate a script to run a model.
 """
+
+import json
 import os
 
 from m4db_database.configuration import read_config_from_environ
@@ -99,6 +101,4 @@ class GetModelMerrillScript:
 
         merrill_template = template_env("merrill").get_template("merrill_model.jinja2")
 
-        resp.content_type = "text/plain"
-        resp.downloadable_as = global_vars.model_merrill_script_file_name
-        resp.body = merrill_template.render(model=runner_data)
+        resp.body = json.dumps({"return": merrill_template.render(model=runner_data)})

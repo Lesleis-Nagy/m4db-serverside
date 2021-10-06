@@ -1,7 +1,7 @@
 import re
 
 
-def parse_merrill_stdout(str_stdout):
+def read_merrill_stdout(str_stdout):
     r"""
     This function will parse some merrill standard output and produce a python dictionary of values (see output).
 
@@ -134,7 +134,6 @@ def parse_merrill_stdout(str_stdout):
 
     # Process the stdout line by line.
     for line in stdout_lines:
-        print("This is line: {}".format(line))
         match_delta_f = regex_delta_f.match(line)
         if match_delta_f:
             restart_counter += 1

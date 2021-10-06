@@ -1,6 +1,7 @@
 r"""
 A service to retrieve a software's executable.
 """
+import json
 import falcon
 
 from m4db_database.orm.latest import Software
@@ -22,4 +23,4 @@ class GetSoftwareExecutable:
         if software.executable is None or software.executable == "":
             resp.status = falcon.HTTP_404
         else:
-            resp.body = software.executable
+            resp.body = json.dumps({"return": software.executable})

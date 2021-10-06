@@ -1,6 +1,7 @@
 r"""
 An API call that will retrieve the micromagnetics executable.
 """
+import json
 
 from m4db_database.configuration import read_config_from_environ
 
@@ -24,4 +25,7 @@ def get_software_executable(name, version):
     session = get_session()
     response = session.get(service_url, verify=False)
     response.raise_for_status()
-    return response.text
+
+    output = json.loads(response.text)
+
+    return output["return"]

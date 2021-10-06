@@ -30,15 +30,18 @@ def pathIdNameADM(pathId):
     return 'adm_{}'.format(pathId)
 
 
-def tec_to_unstructured_grid(absFileName, title, adm_fun='0.5*(1-(({M}.iHat)^4 + ({M}.jHat)^4 + ({M}.kHat)^4))'):
+def tec_to_unstructured_grid(absFileName, title=None, adm_fun='0.5*(1-(({M}.iHat)^4 + ({M}.jHat)^4 + ({M}.kHat)^4))'):
     tec_raw = read_tecplot(absFileName)
 
-    # Retrieve magnetization with title
     mag = None
-    for index, field_title in enumerate(tec_raw["field_titles"]):
-        if title == field_title:
-            mag = tec_raw["fields"][index]
-            break
+    if title is None:
+        mag = tec_raw["fields"][0]
+    else:
+        # Retrieve magnetization with title
+        for index, field_title in enumerate(tec_raw["field_titles"]):
+            if title == field_title:
+                mag = tec_raw["fields"][index]
+                break
 
     if mag is None:
         raise ValueError("Could not find magnetization associated with '{}'".format(title))

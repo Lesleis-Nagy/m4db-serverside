@@ -9,7 +9,7 @@
 #SBATCH --time={{sdata.time}}
 #SBATCH --chdir={{sdata.working_directory}}
 
-srun -N 1 m4db_wait --unique-id {{sdata.unique_id}}
-srun -N 1 m4db_neb_set_running_status --unique-id {{sdata.unique_id}} --new-status running
-srun -N 1 merrill {{sdata.merrill_script}} 1> {{sdata.neb_stdout_txt}} 2> {{sdata.neb_stderr_txt}}
-srun -N 1 m4db_neb_set_running_status --unique-id {{sdata.unique_id}} --new-status `m4db_neb_evaluate_running_status {{ sdata.unique_id }}`
+module load m4db-database/1.0.0
+module load m4db-serverside/1.0.0
+
+srun -N 1

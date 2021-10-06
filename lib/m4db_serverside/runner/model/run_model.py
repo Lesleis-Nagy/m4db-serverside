@@ -12,10 +12,11 @@ from m4db_database.configuration import read_config_from_environ
 from m4db_database.utilities import uid_to_dir
 
 from m4db_serverside.rest_api.m4db_runner_web.get_model_merrill_script import get_model_merrill_script
+from m4db_serverside.rest_api.m4db_runner_web.get_model_software_executable import get_model_software_executable
 from m4db_serverside.rest_api.m4db_runner_web.set_model_running_status import set_model_running_status
 from m4db_serverside.rest_api.m4db_runner_web.set_model_quants import set_model_quants
 
-from m4db_serverside.parsers.merrill_parser import parse_merrill_stdout
+from m4db_serverside.file_io.merrill_stdio import read_merrill_stdout
 
 from m4db_serverside.postprocessing.field_calculations import tec_to_unstructured_grid
 from m4db_serverside.postprocessing.field_calculations import net_quantities
@@ -40,6 +41,9 @@ def run_model(unique_id):
         # Switch to the working directory.
         os.chdir(tmpdir)
 
+        # Get the executable.
+        executable = get_model_software_executable(unique_id)
+
         # Create a Merrill script.
         get_model_merrill_script(unique_id, global_vars.model_merrill_script_file_name)
 
@@ -47,10 +51,11 @@ def run_model(unique_id):
         set_model_running_status(unique_id, "running")
 
         # Execute the merrill script.
+        cmd = "{exe:} {merrill_script:}".format(
+                exe=executable, merrill_script=global_vars.model_merrill_script_file_name
+        )
         proc = Popen(
-            "{merrill_exe:} {merrill_script:}".format(
-                merrill_exe=config["mm_binary"], merrill_script=global_vars.model_merrill_script_file_name
-            ),
+            cmd,
             stdout=PIPE,
             stderr=PIPE,
             universal_newlines=True,
@@ -58,7 +63,10 @@ def run_model(unique_id):
             shell=True
         )
         stdout, stderr = proc.communicate()
-        print(stdout)
+
+        # Check whether a file called "magnetization_mult.tec" was created - if so then rename it.
+        if (os.path.isfile(global_vars.magnetization_mult_tecplot_file_name)):
+            os.rename(global_vars.magnetization_mult_tecplot_file_name, global_vars.magnetization_tecplot_file_name)
 
         # Write standard output and standard error to files.
         with open(global_vars.model_stdout_file_name, "w") as fout:
@@ -67,7 +75,9 @@ def run_model(unique_id):
             fout.write(stderr)
 
         # Check output.
-        quants1 = parse_merrill_stdout(global_vars.model_stdout_file_name)
+        with open(global_vars.model_stdout_file_name) as fin:
+            stdout_contents = fin.readlines()
+        quants1 = read_merrill_stdout(stdout_contents)
         if quants1["failed"]:
             set_model_running_status(unique_id, "re-run")
             return
@@ -96,11 +106,12 @@ def run_model(unique_id):
                          e_exch3=quants1["exch3_energy"],
                          e_exch4=quants1["exch4_energy"],
                          e_tot=quants1["tot_energy"],
-                         volume=quants2["volume"])
+                         volume=quants2["total_vol"])
 
         # Copy all files to the final destination
         os.makedirs(database_dir, exist_ok=True)
         src_files = os.listdir(".")
+
         for file_name in src_files:
             if os.path.isfile(file_name):
                 shutil.copy(file_name, database_dir)

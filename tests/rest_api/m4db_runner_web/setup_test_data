@@ -1,0 +1,15 @@
+#!/bin/bash
+
+#
+# Set up test data prior to running web tests.
+#
+
+# Drop m4db database.
+echo "drop database m4db; create database m4db;" | psql -d postgres
+
+# Add the test data.
+psql -d m4db < ../../../test_data/postgres/m4db_models.sql
+
+echo "############################################"
+echo "# NOW MAKE SURE YOU'RE RUNNING THE SERVER! #"
+echo "############################################"

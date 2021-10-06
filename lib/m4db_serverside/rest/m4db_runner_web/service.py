@@ -11,6 +11,8 @@ from m4db_serverside.rest.m4db_runner_web.get_software_executable import GetSoft
 from m4db_serverside.rest.m4db_runner_web.set_model_running_status import SetModelRunningStatus
 from m4db_serverside.rest.m4db_runner_web.set_model_quants import SetModelQuants
 from m4db_serverside.rest.m4db_runner_web.get_model_merrill_script import GetModelMerrillScript
+from m4db_serverside.rest.m4db_runner_web.get_model_running_status import GetModelRunningStatus
+from m4db_serverside.rest.m4db_runner_web.get_model_software_executable import GetModelSoftwareExecutable
 
 from m4db_serverside.rest.m4db_runner_web.set_neb_running_status import SetNEBRunningStatus
 from m4db_serverside.rest.m4db_runner_web.is_neb_runnable import IsNEBRunnable
@@ -53,6 +55,18 @@ app.add_route(
 get_model_merrill_script = GetModelMerrillScript()
 app.add_route(
     "/get_model_merrill_script/{unique_id}", get_model_merrill_script
+)
+
+# Model: get model running status.
+get_model_running_status = GetModelRunningStatus()
+app.add_route(
+    "/get_model_running_status/{unique_id}", get_model_running_status
+)
+
+# Model: get model software executable.
+get_model_software_executable = GetModelSoftwareExecutable()
+app.add_route(
+    "/get_model_software_executable/{unique_id}", get_model_software_executable
 )
 
 # NEB: set running status service.
