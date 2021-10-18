@@ -1,17 +1,42 @@
 #!python
 
-from argparse import ArgumentParser
-
-
-def command_line_parser():
-    parser = ArgumentParser()
-
-    return parser
+from m4db_serverside.scripts.m4db_schedule_model.command_line_parser import command_line_parser
+from m4db_serverside.scripts.m4db_schedule_model.actions import schedule_jobs
 
 
 def main():
     parser = command_line_parser()
     args = parser.parse_args()
+
+    kwargs = {}
+    if args.running_status is not None:
+        kwargs["running_status"] = args.running_status
+    if args.geometry is not None:
+        kwargs["geometry"] = args.geometry
+    if args.size is not None:
+        kwargs["size"] = args.size
+        # Only bother to use size units and size conventions if a size is already given.
+        if args.size_unit is not None:
+            kwargs["size_unit"] = args.size_unit
+        if args.size_convention is not None:
+            kwargs["size_convention"] = args.size_convention
+    if args.db_user is not None:
+        kwargs["db_user"] = args.db_user
+    if args.software is not None:
+        kwargs["software"] = args.software
+        # Only bother to use software version if software is already given.
+        if args.software_version is not None:
+            kwargs["software_version"] = args.software_version
+    if args.material is not None:
+        kwargs["material"] = args.material
+    if args.temperature is not None:
+        kwargs["temperature"] = args.temperature
+    if args.real_run is not None:
+        kwargs["real_run"] = args.real_run
+    if args.list_unique_ids is not None:
+        kwargs["list_unique_ids"] = args.list_unique_ids
+
+    schedule_jobs(**kwargs)
 
 
 if __name__ == "__main__":

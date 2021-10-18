@@ -42,8 +42,8 @@ def add_subparser(subparsers):
                                help="a description of the meshing software")
     add_subparser.add_argument("--software-citation",
                                help="a citation or DOI of the meshing software")
-    add_subparser.add_argument("--patran-generation-script",
-                               help="script used to generate the new geometry patran file")
+    add_subparser.add_argument("--patran-generation-scripts",
+                               help="scripts used to generate the new geometry patran file")
     add_subparser.add_argument("--patran-generation-stdout",
                                help="standard output of the meshing")
 

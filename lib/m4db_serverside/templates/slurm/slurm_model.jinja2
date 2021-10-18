@@ -9,8 +9,11 @@
 #SBATCH --time={{sdata.time}}
 #SBATCH --chdir={{sdata.working_directory}}
 
-srun -N 1 m4db_wait --unique-id {{sdata.unique_id}}
-srun -N 1 m4db_model_set_running_status --unique-id {{sdata.unique_id}} --new-status running
-srun -N 1 merrill {{sdata.merrill_script}} 1> {{sdata.model_stdout_txt}} 2> {{sdata.model_stderr_txt}}
-srun -N 1 m4db_model_rename_tecplot --unique-id {{sdata.unique_id}}
-srun -N 1 m4db_model_postprocess {{sdata.unique_id}}
+# Load modules
+export MODULEPATH={{sdata.module_dir}}
+{% for module in sdata.modules %}
+module load {{ module }}
+{% endfor %}
+
+# Run model
+srun -N 1 m4db_run_model {{sdata.unique_id}}

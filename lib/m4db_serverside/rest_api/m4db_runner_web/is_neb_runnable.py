@@ -15,12 +15,12 @@ def is_neb_runnable(unique_id):
     :return: True if the NEB is runnable, otherwise False.
     """
     config = read_config_from_environ()
-    service_url = "https://{host:}:{port:}/is_neb_runnable".format(
+    service_url = "http://{host:}:{port:}/is_neb_runnable".format(
         host=config["m4db_runner_web"]["host"],
         port=config["m4db_runner_web"]["port"]
     )
     session = get_session()
-    response = session.post(service_url, data=json.dumps({"unique_id": unique_id}), verify=False)
+    response = session.post(service_url, data=json.dumps({"unique_id": unique_id}))
     response.raise_for_status()
 
     output = json.loads(response.text)

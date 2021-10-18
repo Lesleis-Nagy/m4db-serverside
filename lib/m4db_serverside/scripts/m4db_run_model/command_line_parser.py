@@ -1,5 +1,5 @@
 r"""
-Create a command line parser to handle input for a model runner utility script.
+Create a command line parser to handle input for a model runner utility scripts.
 """
 
 from argparse import ArgumentParser

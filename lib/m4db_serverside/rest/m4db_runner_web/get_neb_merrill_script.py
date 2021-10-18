@@ -1,5 +1,5 @@
 r"""
-A service to generate a script to run an NEB model.
+A service to generate a scripts to run an NEB model.
 """
 
 import json
@@ -134,7 +134,7 @@ class GetNEBMerrillScript:
 
     def on_get(self, req, resp, unique_id):
         r"""
-        Get/generate a script to run an NEB model.
+        Get/generate a scripts to run an NEB model.
         :param req: request object.
         :param resp: response object.
         :param unique_id: the unique identifier of an NEB.
@@ -145,7 +145,7 @@ class GetNEBMerrillScript:
         neb = self.session.query(NEB).\
             filter(NEB.unique_id == unique_id).one()
 
-        # Depending on whether this has a parent, generate a script
+        # Depending on whether this has a parent, generate a scripts
         if neb.parent_neb:
             runner_data = runner_data_with_parent(neb)
             merrill_template = template_env("merrill").get_template("merrill_neb_child_path.jinja2")

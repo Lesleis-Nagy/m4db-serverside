@@ -1,0 +1,18 @@
+#!python
+
+from m4db_serverside.scripts.m4db_assay.command_line_parser import command_line_parser
+from m4db_serverside.scripts.m4db_assay.actions import general_action
+
+
+def main():
+    parser = command_line_parser()
+    args = parser.parse_args()
+
+    if args.command == "general":
+        general_action()
+    else:
+        parser.print_help()
+
+        
+if __name__ == "__main__":
+    main()

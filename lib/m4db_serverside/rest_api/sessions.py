@@ -18,11 +18,12 @@ def get_session():
     config = read_config_from_environ()
 
     session = requests.session()
+
     retries = Retry(
         total=config["m4db_runner_web"]["no_of_retries"],
         backoff_factor=config["m4db_runner_web"]["backoff_factor"],
         status_forcelist=[502, 503, 504]
     )
-    session.mount("https://", HTTPAdapter(max_retries=retries))
+    session.mount("http://", HTTPAdapter(max_retries=retries))
 
     return session

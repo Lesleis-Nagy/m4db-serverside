@@ -15,6 +15,8 @@ def main():
             new_geometry_action(args)
         except ValueError as e:
             print(str(e))
+    else:
+        parser.print_help()
 
 
 if __name__ == "__main__":

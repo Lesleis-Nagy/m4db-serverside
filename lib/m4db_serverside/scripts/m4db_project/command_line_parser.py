@@ -1,6 +1,6 @@
 
 r"""
-Create a command line parser to handle project server side script utility commands.
+Create a command line parser to handle project server side scripts utility commands.
 """
 
 from argparse import ArgumentParser

@@ -13,13 +13,13 @@ def is_alive():
     :return: True if `m4db-runner-web` is accessible, otherwise False.
     """
     config = read_config_from_environ()
-    service_url = "https://{host:}:{port:}/is_alive".format(
+    service_url = "http://{host:}:{port:}/is_alive".format(
         host=config["m4db_runner_web"]["host"],
         port=config["m4db_runner_web"]["port"]
     )
     session = get_session()
     try:
-        response = session.get(service_url, verify=False)
+        response = session.get(service_url)
         response.raise_for_status()
     except:
         return False

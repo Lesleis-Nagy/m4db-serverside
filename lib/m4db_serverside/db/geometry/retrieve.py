@@ -28,8 +28,6 @@ def retrieve_geometry(session, json_model_dict):
     """
     geometry = None
 
-    print("json_model_dict: {}".format(json_model_dict))
-
     # If the 'geometry' field is missing ...
     if "geometry" not in json_model_dict.keys():
         # ... close session & raise error

@@ -15,11 +15,10 @@ from m4db_database.orm.latest import Software
 from m4db_database.orm.latest import Unit
 
 
-def get_models(session, running_status="not-run", **kwargs):
+def get_models(session, **kwargs):
     r"""
     Retrieve a collection of models according to the arguments passed.
     :param session: the database session.
-    :param running_status: running status of the models we wish to run.
     :param kwargs: argument parameters designed to filter specific types of model.
     :return: None
     """
@@ -33,7 +32,9 @@ def get_models(session, running_status="not-run", **kwargs):
         join(Software, Software.id == Metadata.software_id)
 
     # Deal with the running status
-    models_query = models_query.filter(RunningStatus.name == running_status)
+    if "running_status" in kwargs.keys():
+        if kwargs["running_status"] not in ["any", "all"]:
+            models_query = models_query.filter(RunningStatus.name == kwargs["running_status"])
 
     # Deal with the geometry
     if "geometry" in kwargs.keys():
@@ -41,9 +42,9 @@ def get_models(session, running_status="not-run", **kwargs):
     if "size" in kwargs.keys():
         models_query = models_query.filter(Geometry.size == kwargs["size"])
     if "size_unit" in kwargs.keys():
-        models_query = models_query.filter(Unit.name == kwargs["size_unit"])
+        models_query = models_query.filter(Unit.symbol == kwargs["size_unit"])
     if "size_convention" in kwargs.keys():
-        models_query = models_query.filter(SizeConvention.name == kwargs["size_convention"])
+        models_query = models_query.filter(SizeConvention.symbol == kwargs["size_convention"])
 
     # Deal with the metadata
     if "db_user" in kwargs.keys():
@@ -113,3 +114,39 @@ def get_models(session, running_status="not-run", **kwargs):
 
     # Retrieve the models.
     return models_query.all()
+
+
+def get_model_quants(session, **kwargs):
+    r"""
+    Retrieve a collection of model quants according to the arguments passed.
+    :param session: the database session.
+    :param kwargs: argument parameters designed to filter specific types of model.
+    :return: None
+    """
+    models = get_models(session, **kwargs)
+
+    quants = []
+    for model in models:
+        quants.append({
+            "mx_tot": model.mx_tot,
+            "my_tot": model.my_tot,
+            "mz_tot": model.mz_tot,
+            "vx_tot": model.vx_tot,
+            "vy_tot": model.vy_tot,
+            "vz_tot": model.vz_tot,
+            "h_tot": model.h_tot,
+            "rh_tot": model.rh_tot,
+            "adm_tot": model.adm_tot,
+            "e_typical": model.e_typical,
+            "e_anis": model.e_anis,
+            "e_ext": model.e_ext,
+            "e_demag": model.e_demag,
+            "e_exch1": model.e_exch1,
+            "e_exch2": model.e_exch2,
+            "e_exch3": model.e_exch3,
+            "e_exch4": model.e_exch4,
+            "e_tot": model.e_tot,
+            "volume": model.volume
+        })
+
+    return quants

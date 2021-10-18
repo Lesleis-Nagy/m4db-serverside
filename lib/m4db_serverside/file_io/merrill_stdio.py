@@ -1,3 +1,7 @@
+r"""
+A collection of routines to extract information form merrill stdout files.
+"""
+
 import re
 
 
@@ -254,4 +258,44 @@ def read_merrill_stdout(str_stdout):
     result['restart'] = restart_info
 
     return result
+
+
+def extract_path_data(file_name):
+    r"""
+    Extracts the path information from 'file_name'.
+
+    :param file_name: the name of the file containing NEB path energy data.
+
+    :return: a table of 2-tuples, the first entry corresponds to the path
+             index, the second entry corresponds to the energy (in Joule).
+    """
+    regex_path_structure_energies_line = re.compile(
+        r"^\s+Parsing\s+:\s+PathStructureEnergies$"
+    )
+    regex_path_line = re.compile(
+        r"\s+([0-9]+)\s+([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?)$"
+    )
+
+    MODE_NONE = 0
+    MODE_PSTE = 1
+
+    parse_data = []
+    parse_mode = MODE_NONE
+    with open(file_name, "r", errors="ignore") as fin:
+        for line in fin:
+
+            match_path_structure_energies_line = \
+                regex_path_structure_energies_line.match(line)
+
+            if match_path_structure_energies_line:
+                parse_mode = MODE_PSTE
+                continue
+
+            match_path_line = regex_path_line.match(line)
+            if match_path_line and parse_mode == MODE_PSTE:
+                p_index = int(match_path_line.group(1))
+                p_energy = float(match_path_line.group(2))
+                parse_data.append((p_index, p_energy))
+
+    return parse_data
 

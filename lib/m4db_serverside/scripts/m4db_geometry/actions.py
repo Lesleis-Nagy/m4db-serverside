@@ -54,7 +54,7 @@ def copy_geometry_files(unique_id, patran_file, script_file, stdout_file):
     Copy over the actual geometry file.
     :param unique_id": the unique id of the geometry.
     :param patran_file: the patran file to copy.
-    :param script_file: the script file to copy or None.
+    :param script_file: the scripts file to copy or None.
     :param stdout_file: the stdout file to copy or None.
     :return: None.
     """
@@ -112,16 +112,16 @@ def new_geometry_action(args):
         else:
             raise ValueError("Patran file '{}' was not found".format(args.patran_file))
 
-        # If the geometry script generation is supplied, make sure it exists.
+        # If the geometry scripts generation is supplied, make sure it exists.
         if args.patran_generation_script:
             has_mesh_gen_script = True
             if not os.path.isfile(args.patran_generation_script):
-                raise ValueError("Patran geometry script '{}' supplied but not found.".format(
+                raise ValueError("Patran geometry scripts '{}' supplied but not found.".format(
                     args.patran_generation_script))
         else:
             has_mesh_gen_script = False
 
-        # If the geometry script generation standard output is supplied, make sure it exists.
+        # If the geometry scripts generation standard output is supplied, make sure it exists.
         if args.patran_generation_stdout:
             has_mesh_gen_output = True
             if not os.path.isfile(args.patran_generation_stdout):

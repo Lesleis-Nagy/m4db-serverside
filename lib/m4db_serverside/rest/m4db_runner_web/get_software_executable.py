@@ -11,7 +11,7 @@ class GetSoftwareExecutable:
 
     def on_get(self, req, resp, name, version):
         r"""
-        Get/generate a script retrieve the software executable.
+        Get/generate a scripts retrieve the software executable.
         :param req: request object.
         :param resp: response object.
         :return: None

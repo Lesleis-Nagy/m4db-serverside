@@ -12,12 +12,12 @@ def main():
 
     if args.command == "list":
         list_users_action()
-
-    if args.command == "set":
+    elif args.command == "set":
         set_user_action(args)
-
-    if args.command == "add":
+    elif args.command == "add":
         add_user_action(args)
+    else:
+        parser.print_help()
 
 
 if __name__ == "__main__":

@@ -17,7 +17,7 @@ def set_model_quants(unique_id, **kwargs):
     :return:
     """
     config = read_config_from_environ()
-    service_url = "https://{host:}:{port:}/set_model_quants".format(
+    service_url = "http://{host:}:{port:}/set_model_quants".format(
         host=config["m4db_runner_web"]["host"],
         port=config["m4db_runner_web"]["port"]
     )
@@ -25,6 +25,6 @@ def set_model_quants(unique_id, **kwargs):
     params = copy.deepcopy(kwargs)
     params["unique_id"] = unique_id
     session = get_session()
-    response = session.post(service_url, data=json.dumps(params), verify=False)
+    response = session.post(service_url, data=json.dumps(params))
     response.raise_for_status()
 

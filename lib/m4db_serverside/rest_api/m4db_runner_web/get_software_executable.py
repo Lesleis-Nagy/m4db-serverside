@@ -16,14 +16,14 @@ def get_software_executable(name, version):
     :return: None.
     """
     config = read_config_from_environ()
-    service_url = "https://{host:}:{port:}/get_software_executable/{name:}/{version:}".format(
+    service_url = "http://{host:}:{port:}/get_software_executable/{name:}/{version:}".format(
         host=config["m4db_runner_web"]["host"],
         port=config["m4db_runner_web"]["port"],
         name=name,
         version=version
     )
     session = get_session()
-    response = session.get(service_url, verify=False)
+    response = session.get(service_url)
     response.raise_for_status()
 
     output = json.loads(response.text)

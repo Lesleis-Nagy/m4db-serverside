@@ -16,6 +16,8 @@ def main():
         add_software_action(args)
     elif args.command == "update":
         update_software_action(args)
+    else:
+        parser.print_help()
 
 
 if __name__ == "__main__":

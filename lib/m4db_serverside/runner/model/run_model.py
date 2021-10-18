@@ -5,6 +5,8 @@ Scripts to run a micromagnetic model.
 import os
 import shutil
 import tempfile
+import random
+import time
 
 from subprocess import Popen, PIPE
 
@@ -27,6 +29,12 @@ from m4db_serverside import global_vars
 def run_model(unique_id):
     config = read_config_from_environ()
 
+    # Wait a random amount of time based on unique_id.
+    random.seed(unique_id)
+    wait_time = random.randint(1, 20)
+    print("waiting for {}".format(wait_time))
+    time.sleep(wait_time)
+
     # This is the final destination of model data.
     database_dir = os.path.join(
         config["file_root"],
@@ -44,13 +52,13 @@ def run_model(unique_id):
         # Get the executable.
         executable = get_model_software_executable(unique_id)
 
-        # Create a Merrill script.
+        # Create a Merrill scripts.
         get_model_merrill_script(unique_id, global_vars.model_merrill_script_file_name)
 
         # Set the running status to 'running'
         set_model_running_status(unique_id, "running")
 
-        # Execute the merrill script.
+        # Execute the merrill scripts.
         cmd = "{exe:} {merrill_script:}".format(
                 exe=executable, merrill_script=global_vars.model_merrill_script_file_name
         )

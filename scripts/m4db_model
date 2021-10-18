@@ -12,7 +12,7 @@ def main():
     parser = command_line_parser()
     args = parser.parse_args()
 
-    # Process --db_user and --project
+    # Process --db-user and --project
     if args.db_user is None:
         print("Undefined m4db user: either set 'db_user' in '{}' or use the --db-user flag.".format(
             global_vars.m4db_serverside_config_environment_variable
@@ -24,7 +24,7 @@ def main():
         ))
         sys.exit(1)
 
-    if args.command == "add":
+    if args.command == "add-from-json":
         try:
             unique_ids = add_model_action(args)
             print("Created {} models with ids:".format(len(unique_ids)))
@@ -34,6 +34,8 @@ def main():
             print(str(e))
         except ValueError as e:
             print(str(e))
+    else:
+        parser.print_help()
 
 
 if __name__ == "__main__":

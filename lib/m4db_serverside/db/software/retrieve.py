@@ -5,7 +5,7 @@ A collection of routines to retrieve software info from the database.
 from m4db_database.orm.latest import Software
 
 
-def retrieve_software(session, software_name, software_version, allow_none=False):
+def retrieve_software(session, software_name, software_version: str, allow_none=False):
     r"""
     Retrieve software info from the database.
     :param session: a database session.
@@ -14,9 +14,9 @@ def retrieve_software(session, software_name, software_version, allow_none=False
     :return: A Software object.
     """
     # Attempt to retrieve the software
-    software = session.query(Software).\
-        filter(Software.name == software_name).\
-        filter(Software.version == software_version).\
+    software = session.query(Software). \
+        filter(Software.name == software_name). \
+        filter(Software.version == str(software_version)). \
         one_or_none()
     # If the software cannot be found ...
     if software is None:

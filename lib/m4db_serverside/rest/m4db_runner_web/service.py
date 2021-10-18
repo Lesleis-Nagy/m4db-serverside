@@ -20,7 +20,7 @@ from m4db_serverside.rest.m4db_runner_web.get_neb_merrill_script import GetNEBMe
 
 Session = get_session(scoped=True, echo=False)
 
-app = falcon.API(
+app = falcon.App(
     middleware=[
         SQLAlchemySessionManager(Session)
     ]
@@ -51,7 +51,7 @@ app.add_route(
     "/set_model_quants", set_model_quants
 )
 
-# Model: get merrill model script.
+# Model: get merrill model scripts.
 get_model_merrill_script = GetModelMerrillScript()
 app.add_route(
     "/get_model_merrill_script/{unique_id}", get_model_merrill_script
@@ -81,7 +81,7 @@ app.add_route(
     "/is_neb_runnable", is_neb_runnable
 )
 
-# NEB: get merrill neb script.
+# NEB: get merrill neb scripts.
 get_neb_merrill_script = GetNEBMerrillScript()
 app.add_route(
     "/get_neb_merrill_script/{unique_id}", get_neb_merrill_script

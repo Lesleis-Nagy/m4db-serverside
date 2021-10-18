@@ -1,5 +1,5 @@
 r"""
-A service to generate a script to retrieve a model's running status.
+A service to generate a scripts to retrieve a model's running status.
 """
 
 import json

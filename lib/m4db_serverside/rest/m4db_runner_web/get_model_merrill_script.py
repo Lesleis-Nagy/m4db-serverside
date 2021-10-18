@@ -1,5 +1,5 @@
 r"""
-A service to generate a script to run a model.
+A service to generate a scripts to run a model.
 """
 
 import json
@@ -21,7 +21,7 @@ class GetModelMerrillScript:
 
     def on_get(self, req, resp, unique_id):
         r"""
-        Get/generate a script to run a model.
+        Get/generate a scripts to run a model.
         :param req: request object.
         :param resp: response object.
         :param unique_id: the unique identifier of a model.

@@ -3,7 +3,7 @@
 from distutils.core import setup
 
 NAME = "m4db_serverside"
-VERSION = "1.1.0"
+VERSION = "1.2.0"
 
 setup(
     name=NAME,
@@ -37,6 +37,8 @@ setup(
 
         "m4db_serverside.rest",
         "m4db_serverside.rest.m4db_runner_web",
+        "m4db_serverside.rest.m4db_readonly_web",
+
         "m4db_serverside.rest_api",
         "m4db_serverside.rest_api.m4db_runner_web",
 
@@ -44,11 +46,12 @@ setup(
         "m4db_serverside.runner.model",
 
         "m4db_serverside.scripts",
-        "m4db_serverside.scripts.m4db_create_config",
+        "m4db_serverside.scripts.m4db_assay",
         "m4db_serverside.scripts.m4db_geometry",
         "m4db_serverside.scripts.m4db_model",
         "m4db_serverside.scripts.m4db_project",
         "m4db_serverside.scripts.m4db_run_model",
+        "m4db_serverside.scripts.m4db_schedule_model",
         "m4db_serverside.scripts.m4db_software",
         "m4db_serverside.scripts.m4db_user",
 
@@ -63,7 +66,7 @@ setup(
         "m4db_serverside.templates": ["merrill/*.jinja2", "slurm/*.jinja2"]
     },
     scripts=[
-        "scripts/m4db_create_config",
+        "scripts/m4db_assay",
         "scripts/m4db_geometry",
         "scripts/m4db_model",
         "scripts/m4db_project",
@@ -72,7 +75,8 @@ setup(
         "scripts/m4db_software",
         "scripts/m4db_user",
 
-        "rest/m4db_start_runner_web"
+        "rest/m4db_start_runner_web",
+        "rest/m4db_start_readonly_web"
     ],
     classifiers=[
         "Development Status :: 3 - Alpha",
