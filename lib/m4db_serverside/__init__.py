@@ -19,6 +19,7 @@ class global_vars:
 
     magnetization_dat_file_name = "magnetization.dat"
     magnetization_tecplot_file_name = "magnetization.tec"
+    magnetization_tecplot_zip_file_name = "magnetization.zip"
     magnetization_mult_tecplot_file_name = "magnetization_mult.tec"
     magnetization_output_file_name = "magnetization"
 
