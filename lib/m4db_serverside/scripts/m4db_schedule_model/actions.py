@@ -39,7 +39,7 @@ def schedule_model(unique_id):
     with NamedTemporaryFile("w") as fout:
         fout.write(slurm_template.render(sdata=sdata))
 
-        print(slurm_template.render(sdata=sdata))
+        # print(slurm_template.render(sdata=sdata))
 
         fout.flush()
 
