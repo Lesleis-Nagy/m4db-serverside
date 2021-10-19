@@ -185,7 +185,7 @@ def read_zone(tecplot_file, zone_metadata, index_offset=-1):
     )
 
 
-def read_tecplot(tecplot_file):
+def read_tecplot(tecplot_file, jsonify=False):
     header_data = read_header(tecplot_file)
 
     # Zones_metadata contains a bunch of ZoneData objects.
@@ -199,12 +199,21 @@ def read_tecplot(tecplot_file):
         v, f, sidxs, eidxs = read_zone(tecplot_file, zone_metadata)
         field_titles.append(zone_metadata.t)
         if zone_metadata.is_first:
-            fields.append(np.array(f, dtype=np.float64))
-            vertices = np.array(v, dtype=np.float64)
-            elements = np.array(eidxs, dtype=np.uint64)
-            submesh_idxs = np.array(sidxs, dtype=np.uint64)
+            if jsonify:
+                fields.append(f),
+                vertices = v
+                elements = eidxs
+                submesh_idxs = sidxs
+            else:
+                fields.append(np.array(f, dtype=np.float64))
+                vertices = np.array(v, dtype=np.float64)
+                elements = np.array(eidxs, dtype=np.uint64)
+                submesh_idxs = np.array(sidxs, dtype=np.uint64)
         else:
-            fields.append(np.array(f, dtype=np.float64))
+            if jsonify:
+                fields.append(f)
+            else:
+                fields.append(np.array(f, dtype=np.float64))
     return {
         "fields": fields,
         "field_titles": field_titles,
