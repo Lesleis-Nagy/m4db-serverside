@@ -6,6 +6,7 @@ from m4db_serverside.rest.middleware import SQLAlchemySessionManager
 
 from m4db_serverside.rest.m4db_readonly_web.get_model_tecplot_file import GetModelTecplotFile
 from m4db_serverside.rest.m4db_readonly_web.get_model_tecplot_file import GetModelTecplotFileZip
+from m4db_serverside.rest.m4db_readonly_web.get_model_tecplot_file import GetModelJSONFile
 
 from m4db_serverside.rest.m4db_readonly_web.get_neb_tecplot_file import GetNebTecplotFile
 from m4db_serverside.rest.m4db_readonly_web.get_neb_path_energies import GetNEBPathEnergiesCSV
@@ -28,6 +29,12 @@ app.add_route(
 get_model_tecplot_file_zip = GetModelTecplotFileZip()
 app.add_route(
     "/model/tecplot/zip/{unique_id}", get_model_tecplot_file_zip
+)
+
+# Service to get a model JSON file.
+get_model_json_file = GetModelJSONFile()
+app.add_route(
+    "/model/json/{unique_id}", get_model_json_file
 )
 
 # Service to get NEB tecplot file.
