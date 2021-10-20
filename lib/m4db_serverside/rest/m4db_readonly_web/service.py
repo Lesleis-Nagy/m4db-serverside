@@ -15,6 +15,9 @@ from m4db_serverside.rest.m4db_readonly_web.get_software_items import GetSoftwar
 
 from m4db_serverside.rest.m4db_readonly_web.get_projects import GetProjects
 
+from m4db_serverside.rest.m4db_readonly_web.get_geometry import GetGeometryNames
+from m4db_serverside.rest.m4db_readonly_web.get_geometry import GetGeometrySizes
+
 from m4db_serverside.rest.m4db_readonly_web.get_neb_tecplot_file import GetNebTecplotFile
 from m4db_serverside.rest.m4db_readonly_web.get_neb_path_energies import GetNEBPathEnergiesCSV
 
@@ -78,4 +81,16 @@ app.add_route(
 get_projects = GetProjects()
 app.add_route(
     "/projects", get_projects
+)
+
+# Service to get geometry names.
+get_geometry_names = GetGeometryNames()
+app.add_route(
+    "/geometry-names", get_geometry_names
+)
+
+# Service to get geometry sizes.
+get_geometry_sizes = GetGeometrySizes()
+app.add_route(
+    "/geometry-sizes/{geometry_name}", get_geometry_sizes
 )
