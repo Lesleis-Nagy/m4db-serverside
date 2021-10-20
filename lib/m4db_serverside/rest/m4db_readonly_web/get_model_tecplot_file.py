@@ -1,7 +1,4 @@
 r"""
-A service to retrieve a tecplot model files.
-"""
-r"""
 A collection of Falcon web services to retrieve model data.
 """
 
