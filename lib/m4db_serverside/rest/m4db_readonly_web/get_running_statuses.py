@@ -1,7 +1,9 @@
 r"""
 A service to retrieve all the possible running statues
 """
-import json
+import falcon
+
+import simplejson as json
 
 from m4db_database.orm.latest import RunningStatus
 
@@ -19,6 +21,10 @@ class GetRunningStatuses:
         :return: None
         """
         running_statuses = self.session.query(RunningStatus).all()
+
+        if not running_statuses or len(response) == 0:
+            resp.status = falcon.HTTP_404
+            return
 
         response = []
         for running_status in running_statuses:

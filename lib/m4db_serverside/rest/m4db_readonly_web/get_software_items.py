@@ -1,8 +1,9 @@
 r"""
 A collection of Falcon services to retrieve software data.
 """
+import falcon
 
-import json
+import simplejson as json
 
 from m4db_database.orm.latest import Software
 
@@ -20,6 +21,10 @@ class GetSoftwareItems:
         :return: None
         """
         software_items = self.session.query(Software).all()
+
+        if not software_items or len(software_items) == 0:
+            resp.status = falcon.HTTP_404
+            return
 
         response = []
         for software_item in software_items:

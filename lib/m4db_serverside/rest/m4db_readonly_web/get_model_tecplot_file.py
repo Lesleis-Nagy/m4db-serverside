@@ -184,6 +184,12 @@ class GetModelJSONFileZip:
             global_vars.magnetization_json_zip_file_name
         )
 
+        # If the Model file doesn't exist then the json cannot exist ...
+        if not os.path.exists(model_path_file):
+            # ... return 404
+            resp.status = falcon.HTTP_404
+            return
+
         # If the model exists but the json doesn't exist, then create the JSON
         if not os.path.exists(json_path_file):
             tecplot_data = read_tecplot(model_path_file, jsonify=True)

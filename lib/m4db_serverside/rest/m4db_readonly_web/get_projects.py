@@ -1,8 +1,9 @@
 r"""
 A service to retrieve all the projects on m4db.
 """
+import falcon
 
-import json
+import simplejson as json
 
 from m4db_database.orm.latest import Project
 
@@ -20,6 +21,10 @@ class GetProjects:
         :return:
         """
         projects = self.session.query(Project).all()
+
+        if not projects or len(projects) == 0:
+            resp.status = falcon.HTTP_404
+            return
 
         response = []
         for project in projects:
