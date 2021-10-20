@@ -11,6 +11,8 @@ from m4db_serverside.rest.m4db_readonly_web.get_model_tecplot_file import GetMod
 
 from m4db_serverside.rest.m4db_readonly_web.get_running_statuses import GetRunningStatuses
 
+from m4db_serverside.rest.m4db_readonly_web.get_software_items import GetSoftwareItems
+
 from m4db_serverside.rest.m4db_readonly_web.get_neb_tecplot_file import GetNebTecplotFile
 from m4db_serverside.rest.m4db_readonly_web.get_neb_path_energies import GetNEBPathEnergiesCSV
 
@@ -62,4 +64,10 @@ app.add_route(
 get_running_statuses = GetRunningStatuses()
 app.add_route(
     "/running-statuses", get_running_statuses
+)
+
+# Service to get software items.
+get_software_items = GetSoftwareItems()
+app.add_route(
+    "/software-items", get_software_items
 )
