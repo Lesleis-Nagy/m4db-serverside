@@ -13,6 +13,8 @@ from m4db_serverside.rest.m4db_readonly_web.get_running_statuses import GetRunni
 
 from m4db_serverside.rest.m4db_readonly_web.get_software_items import GetSoftwareItems
 
+from m4db_serverside.rest.m4db_readonly_web.get_projects import GetProjects
+
 from m4db_serverside.rest.m4db_readonly_web.get_neb_tecplot_file import GetNebTecplotFile
 from m4db_serverside.rest.m4db_readonly_web.get_neb_path_energies import GetNEBPathEnergiesCSV
 
@@ -70,4 +72,10 @@ app.add_route(
 get_software_items = GetSoftwareItems()
 app.add_route(
     "/software-items", get_software_items
+)
+
+# Service to get projects.
+get_projects = GetProjects()
+app.add_route(
+    "/projects", get_projects
 )
