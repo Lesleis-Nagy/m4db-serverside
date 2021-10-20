@@ -22,7 +22,7 @@ class GetRunningStatuses:
         """
         running_statuses = self.session.query(RunningStatus).all()
 
-        if not running_statuses or len(response) == 0:
+        if not running_statuses or len(running_statuses) == 0:
             resp.status = falcon.HTTP_404
             return
 
