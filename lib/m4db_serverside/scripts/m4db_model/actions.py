@@ -7,6 +7,7 @@ import sys
 
 from m4db_database.sessions import get_session
 
+from m4db_serverside.db.model.retrieve import get_models
 from m4db_serverside.db.model.create import create_model
 
 
@@ -53,3 +54,24 @@ def add_model_action(args):
         return unique_ids
     finally:
         session.close()
+
+
+def uid_list_action(**kwargs):
+    r"""
+    Retrieve a list of
+    :param kwargs:
+    :return:
+    """
+    with get_session(nullpool=True) as session:
+        models = get_models(session, **kwargs)
+        model_unique_ids = []
+        for model in models:
+            model_unique_ids.append(model.unique_id)
+        session.close()
+
+        print("--------------------------")
+        print(" Model unique ids:")
+        print("--------------------------")
+        for index, model_unique_id in enumerate(model_unique_ids):
+            print("{:5d}) {}".format(index+1, model_unique_id))
+        print()
