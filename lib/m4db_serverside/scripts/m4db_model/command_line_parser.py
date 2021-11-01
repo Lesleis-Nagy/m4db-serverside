@@ -88,6 +88,23 @@ def add_uid_list_subparser(subparsers):
     subparser.add_argument("--temperature",
                            help="a temperature belonging to the model")
 
+    add_common_subparser_args(subparser)
+
+    return subparser
+
+
+def add_archive_subparser(subparsers):
+    r"""
+    Add a subparser to deal with archiving models.
+    :param subparsers: the subparsers object.
+    :return: the 'archive' subparser.
+    """
+    subparser = subparsers.add_parser(
+        "archive",
+        help="Archive the model with the given unique ID."
+    )
+
+    subparser.add_argument("unique_id", help="unique ID of a model.")
 
     add_common_subparser_args(subparser)
 
@@ -105,5 +122,6 @@ def command_line_parser():
 
     add_from_json_subparser(subparsers)
     add_uid_list_subparser(subparsers)
+    add_archive_subparser(subparsers)
 
     return parser

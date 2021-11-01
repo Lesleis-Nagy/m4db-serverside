@@ -5,6 +5,7 @@ import sys
 from m4db_serverside.scripts.m4db_model.command_line_parser import command_line_parser
 from m4db_serverside.scripts.m4db_model.actions import add_model_action
 from m4db_serverside.scripts.m4db_model.actions import uid_list_action
+from m4db_serverside.scripts.m4db_model.actions import archive_action
 
 from m4db_serverside import global_vars
 
@@ -26,6 +27,9 @@ def main():
         sys.exit(1)
 
     if args.command == "add-from-json":
+        ###############################################################################################################
+        # Command: add-from-json                                                                                      #
+        ###############################################################################################################
         try:
             unique_ids = add_model_action(args)
             print("Created {} models with ids:".format(len(unique_ids)))
@@ -36,6 +40,9 @@ def main():
         except ValueError as e:
             print(str(e))
     elif args.command == "uid-list":
+        ###############################################################################################################
+        # Command: uid-list                                                                                           #
+        ###############################################################################################################
         kwargs = {}
         if args.running_status is not None:
             kwargs["running_status"] = args.running_status
@@ -60,6 +67,11 @@ def main():
         if args.temperature is not None:
             kwargs["temperature"] = args.temperature
         uid_list_action(**kwargs)
+    elif args.command == 'archive':
+        ###############################################################################################################
+        # Command: archive                                                                                            #
+        ###############################################################################################################
+        archive_action(args)
     else:
         parser.print_help()
 

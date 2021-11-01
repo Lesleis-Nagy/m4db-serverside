@@ -9,6 +9,7 @@ from m4db_database.sessions import get_session
 
 from m4db_serverside.db.model.retrieve import get_models
 from m4db_serverside.db.model.create import create_model
+from m4db_serverside.utilities.archive import archive_model
 
 
 def add_model_action(args):
@@ -75,3 +76,12 @@ def uid_list_action(**kwargs):
         for index, model_unique_id in enumerate(model_unique_ids):
             print("{:5d}) {}".format(index+1, model_unique_id))
         print()
+
+
+def archive_action(args):
+    r"""
+    Archive a model.
+    :param args:
+    :return:
+    """
+    archive_model(args.unique_id)
