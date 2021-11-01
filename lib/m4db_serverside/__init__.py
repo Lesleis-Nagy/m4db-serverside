@@ -17,6 +17,8 @@ class global_vars:
 
     energy_log_file_name = "energy"
 
+    data_zip = "data.zip"
+
     magnetization_dat_file_name = "magnetization.dat"
     magnetization_tecplot_file_name = "magnetization.tec"
     magnetization_tecplot_zip_file_name = "magnetization.zip"
