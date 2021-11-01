@@ -171,7 +171,7 @@ def tec_to_unstructured_grid(absFileName, title=None, adm_fun='0.5*(1-(({M}.iHat
         adm_field.SetValue(i, adm_data.GetValue(i))
     ug.GetPointData().AddArray(adm_field)
 
-    return ug
+    return ug, tec_raw
 
 
 def write_vorticity_helicity_adm_to_vtk(ug, file_name):
