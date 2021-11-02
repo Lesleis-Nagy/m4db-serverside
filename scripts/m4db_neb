@@ -1,0 +1,43 @@
+#!python
+import sys
+
+from m4db_serverside.scripts.m4db_neb.command_line_parser import command_line_parser
+
+from m4db_serverside.scripts.m4db_neb.actions import add_fs_path_action
+from m4db_serverside.scripts.m4db_neb.actions import add_neb_child_path_action
+from m4db_serverside.scripts.m4db_neb.actions import add_fs_path_with_neb_child_action
+
+from m4db_serverside import global_vars
+
+
+def main():
+    parser = command_line_parser()
+    args = parser.parse_args()
+
+    # Process --db-user and --project
+    try:
+        if args.db_user is None:
+            print("Undefined m4db user: either set 'db_user' in '{}' or use the --db-user flag.".format(
+                global_vars.m4db_serverside_config_environment_variable
+            ))
+            sys.exit(1)
+        if args.project is None:
+            print("Undefined m4db project: either set 'project' in '{}' or use the --project flat.".format(
+                global_vars.m4db_serverside_config_environment_variable
+            ))
+            sys.exit(1)
+    except AttributeError as exp:
+        parser.print_help()
+
+    if args.command == "add-fs-path":
+        add_fs_path_action(args)
+    elif args.command == "add-neb-child-path":
+        add_neb_child_path_action(args)
+    elif args.command == "add-fs-path-with-neb-child":
+        add_fs_path_with_neb_child_action(args)
+    else:
+        parser.print_help()
+
+
+if __name__ == "__main__":
+    main()

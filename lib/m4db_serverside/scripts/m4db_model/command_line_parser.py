@@ -5,7 +5,7 @@ import m4db_database.configuration
 
 def add_common_subparser_args(subparser):
     r"""
-    Add some common arguments for each subparser (so that we don't repeat code)
+    Add some common arguments for each subparser.
     :param subparser:
     :return:
     """
@@ -34,7 +34,7 @@ def add_from_json_subparser(subparsers):
     r"""
     Add subparser to deal with adding new models to m4db.
     :param subparsers: the subparsers objects.
-    :return: the "new_model" subparser.
+    :return: the "add-from-json" subparser.
     """
     subparser = subparsers.add_parser(
         "add-from-json",

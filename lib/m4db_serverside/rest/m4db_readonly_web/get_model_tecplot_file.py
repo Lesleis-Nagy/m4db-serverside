@@ -3,12 +3,12 @@ A collection of Falcon web services to retrieve model data.
 """
 
 import io
-import json
 import mimetypes
 import os
 import zipfile
-
 import falcon
+
+import simplejson as json
 
 from m4db_database.configuration import read_config_from_environ
 from m4db_database.utilities import uid_to_dir
@@ -78,6 +78,12 @@ class GetModelTecplotFileZip:
             global_vars.magnetization_tecplot_zip_file_name
         )
 
+        # If the zip file exists, return it
+        if os.path.exists(zip_path_file):
+            resp.content_type = mimetypes.guess_type(zip_path_file)[0]
+            resp.stream = io.open(zip_path_file, "rb")
+            resp.content_length = os.path.getsize(zip_path_file)
+
         # If the Model file doesn't exist then the zip cannot exist ...
         if not os.path.exists(model_path_file):
             # ... return 404
@@ -97,6 +103,15 @@ class GetModelTecplotFileZip:
             resp.content_type = mimetypes.guess_type(zip_path_file)[0]
             resp.stream = io.open(zip_path_file, "rb")
             resp.content_length = os.path.getsize(zip_path_file)
+
+    def _check_and_return_zip(self, req, resp, unique_id):
+        r"""
+        Check whether the zip file exists, if it does simply return it
+        :param req: Falcon request object.
+        :param resp: Falcon response object.
+        :param unique_id: unique ID of a model.
+        :return: True, if the file was found and returned, otherwise false.
+        """
 
 
 class GetModelJSONFile:
@@ -138,7 +153,7 @@ class GetModelJSONFile:
         if not os.path.exists(json_path_file):
             tecplot_data = read_tecplot(model_path_file, jsonify=True)
             with open(json_path_file, "w") as fout:
-                fout.write(json.dumps(tecplot_data, sort_keys=True, indent=4))
+                fout.write(json.dumps(tecplot_data))
 
         # Return the stream
         if os.path.exists(json_path_file):
@@ -194,7 +209,7 @@ class GetModelJSONFileZip:
         if not os.path.exists(json_path_file):
             tecplot_data = read_tecplot(model_path_file, jsonify=True)
             with open(json_path_file, "w") as fout:
-                fout.write(json.dumps(tecplot_data, sort_keys=True, indent=4))
+                fout.write(json.dumps(tecplot_data))
 
         # The JSON zip files doesn't exist then create it
         if os.path.exists(json_path_file):

@@ -23,6 +23,7 @@ setup(
         "m4db_serverside.db.geometry",
         "m4db_serverside.db.initial_magnetization",
         "m4db_serverside.db.model",
+        "m4db_serverside.db.neb",
         "m4db_serverside.db.model_material_associations",
         "m4db_serverside.db.model_materials_text",
         "m4db_serverside.db.project",
@@ -49,6 +50,7 @@ setup(
         "m4db_serverside.scripts.m4db_assay",
         "m4db_serverside.scripts.m4db_geometry",
         "m4db_serverside.scripts.m4db_model",
+        "m4db_serverside.scripts.m4db_neb",
         "m4db_serverside.scripts.m4db_project",
         "m4db_serverside.scripts.m4db_run_model",
         "m4db_serverside.scripts.m4db_schedule_model",
@@ -74,6 +76,7 @@ setup(
         "scripts/m4db_schedule_model",
         "scripts/m4db_software",
         "scripts/m4db_user",
+        "scripts/m4db_neb",
 
         "rest/m4db_start_runner_web",
         "rest/m4db_start_readonly_web"
