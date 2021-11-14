@@ -1,0 +1,8 @@
+scp lnagy2@ssh.geos.ed.ac.uk:/exports/geos.ed.ac.uk/micro_magnetism/MMDatabase/fs_m4db/neb/00/39/1a/fc/e4/26/43/5d/9a/90/10/d7/85/b4/96/a6/neb_stdout.txt neb_stdout1.txt
+scp lnagy2@ssh.geos.ed.ac.uk:/exports/geos.ed.ac.uk/micro_magnetism/MMDatabase/fs_m4db/neb/00/39/47/63/21/25/49/48/9f/c8/6c/b4/8d/8a/a6/02/neb_stdout.txt neb_stdout2.txt
+scp lnagy2@ssh.geos.ed.ac.uk:/exports/geos.ed.ac.uk/micro_magnetism/MMDatabase/fs_m4db/neb/00/39/4d/b1/21/db/49/a5/a0/b2/da/e4/f4/b6/43/31/neb_stdout.txt neb_stdout3.txt
+scp lnagy2@ssh.geos.ed.ac.uk:/exports/geos.ed.ac.uk/micro_magnetism/MMDatabase/fs_m4db/neb/00/39/6f/28/df/e4/40/f5/91/05/6f/b1/5d/56/16/f7/neb_stdout.txt neb_stdout4.txt
+scp lnagy2@ssh.geos.ed.ac.uk:/exports/geos.ed.ac.uk/micro_magnetism/MMDatabase/fs_m4db/neb/00/39/82/43/d6/a7/40/51/8c/9d/4c/ba/3c/5b/eb/41/neb_stdout.txt neb_stdout5.txt
+scp lnagy2@ssh.geos.ed.ac.uk:/exports/geos.ed.ac.uk/micro_magnetism/MMDatabase/fs_m4db/neb/00/39/95/a2/5b/9e/4e/b3/92/f1/39/10/43/6a/bc/97/neb_stdout.txt neb_stdout6.txt
+scp lnagy2@ssh.geos.ed.ac.uk:/exports/geos.ed.ac.uk/micro_magnetism/MMDatabase/fs_m4db/neb/00/39/9d/69/b0/32/4c/19/9c/9e/b1/d6/a8/07/77/d9/neb_stdout.txt neb_stdout7.txt
+
