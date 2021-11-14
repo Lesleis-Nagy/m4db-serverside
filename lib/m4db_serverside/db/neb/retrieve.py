@@ -56,10 +56,10 @@ def get_nebs(session, **kwargs):
     # Deal with the metadata
     if "db_user" in kwargs.keys():
         neb_query = neb_query.filter(DBUser.user_name == kwargs["db_user"])
-    if "software" in kwargs.keys():
-        neb_query = neb_query.filter(Software.name == kwargs["software"])
-    if "software_version" in kwargs.keys():
-        neb_query = neb_query.filter(Software.version == kwargs["software_version"])
+    #if "software" in kwargs.keys():
+    #    neb_query = neb_query.filter(Software.name == kwargs["software"])
+    #if "software_version" in kwargs.keys():
+    #    neb_query = neb_query.filter(Software.version == kwargs["software_version"])
 
     # Deal with the materials.
     materials = None

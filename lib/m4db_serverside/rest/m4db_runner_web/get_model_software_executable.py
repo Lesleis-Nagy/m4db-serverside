@@ -13,7 +13,7 @@ class GetModelSoftwareExecutable:
         Get the executable associated with a model.
         :param req: request object.
         :param resp: response object.
-        :param unique_id: the unique identifier of an NEB.
+        :param unique_id: the unique identifier of a model.
         :return: None
         """
         model = self.session.query(Model).\

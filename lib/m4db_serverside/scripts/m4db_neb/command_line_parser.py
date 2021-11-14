@@ -110,6 +110,44 @@ def add_fs_path_with_neb_child_subparser(subparsers):
     return subparser
 
 
+def add_uid_list_subparser(subparsers):
+    r"""
+    Add a subparser to deal with retreiving (filtered) NEB unique IDs.
+    :param subparsers: the subparsers object
+    :return: the 'uid-list' subparser.
+    """
+    subparser = subparsers.add_parser(
+        "uid-list",
+        help="Retrieve a list of unique ids matching search criteria."
+    )
+
+    subparser.add_argument("--running-status",
+                           default="finished",
+                           choices=["not-run", "re-run", "running", "finished", "crashed", "any"],
+                           help="schedule models with this running status")
+    subparser.add_argument("--geometry",
+                           help="the name of the geometry to execute")
+    subparser.add_argument("--size",
+                           type=float,
+                           help="the size of the geometry")
+    subparser.add_argument("--size-unit",
+                           default="um",
+                           choices=["m", "cm", "mm", "um", "nm", "pm", "fm", "am"],
+                           help="the size unit for the geometry")
+    subparser.add_argument("--size-convention",
+                           default="ESVD",
+                           choices=["ESVD", "ECVL"],
+                           help="the size convention for the geometry")
+    subparser.add_argument("--material",
+                           help="a material belonging to the model")
+    subparser.add_argument("--temperature",
+                           help="a temperature belonging to the model")
+
+    add_common_subparser_args(subparser)
+
+    return subparser
+
+
 def command_line_parser():
     r"""
     Create a command line parser to handle neb actions.
@@ -121,5 +159,6 @@ def command_line_parser():
     add_fs_path_subparser(subparsers)
     add_neb_child_path_subparser(subparsers)
     add_fs_path_with_neb_child_subparser(subparsers)
+    add_uid_list_subparser(subparsers)
 
     return parser

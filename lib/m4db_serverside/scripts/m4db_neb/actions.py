@@ -6,6 +6,7 @@ from m4db_database.sessions import get_session
 from m4db_serverside.db.neb.create import create_fs_path
 from m4db_serverside.db.neb.create import create_neb_child_path
 from m4db_serverside.db.neb.create import create_fs_path_with_neb_child
+from m4db_serverside.db.neb.retrieve import get_nebs
 
 
 def add_fs_path_action(args):
@@ -34,3 +35,20 @@ def add_fs_path_with_neb_child_action(args):
         parent_unique_id, child_unique_id = create_fs_path_with_neb_child(session, **kwargs)
         print(f"Created (parent) NEB with unique ID: {parent_unique_id}, along with")
         print(f"NEB (child) with unique ID: {child_unique_id}")
+
+
+def uid_list_action(**kwargs):
+
+    with get_session(nullpool=True, echo=False) as session:
+        nebs = get_nebs(session, **kwargs)
+        neb_unique_ids = []
+        for neb in nebs:
+            neb_unique_ids.append(neb.unique_id)
+
+        print("--------------------------")
+        print(" NEB unique ids:")
+        print("--------------------------")
+        for index, neb_unique_id in enumerate(neb_unique_ids):
+            print("{:5d}) {}".format(index + 1, neb_unique_id))
+        print()
+

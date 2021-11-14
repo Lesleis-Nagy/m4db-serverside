@@ -1,0 +1,14 @@
+#!python
+
+from m4db_serverside.scripts.m4db_run_neb.command_line_parser import command_line_parser
+from m4db_serverside.scripts.m4db_run_neb.actions import run_neb
+
+
+def main():
+    parser = command_line_parser()
+    args = parser.parse_args()
+    run_neb(args)
+
+
+if __name__ == "__main__":
+    main()

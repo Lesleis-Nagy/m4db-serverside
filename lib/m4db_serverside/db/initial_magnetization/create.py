@@ -6,6 +6,7 @@ from m4db_database.orm.latest import Model
 from m4db_database.orm.latest import RandomField
 from m4db_database.orm.latest import UniformField
 from m4db_database.orm.latest import ModelField
+from m4db_database.orm.latest import Unit
 
 
 def create_initial_magnetization(session, json_model_dict):
@@ -79,6 +80,7 @@ def create_initial_magnetization(session, json_model_dict):
                 start_magnetization = RandomField(seed=seed)
             elif start_magnetization_type == "uniform":
                 # ... otherwise, if the start_magnetization_type is "uniform" process the uniform field.
+                unitless_unit = session.query(Unit).filter(Unit.symbol == "1").one()
 
                 # If the json_start_magnetization has no x_direction field ...
                 if "x_direction" not in json_start_magnetization.keys():
@@ -109,7 +111,8 @@ def create_initial_magnetization(session, json_model_dict):
                     dx=start_magnetization_x_direction,
                     dy=start_magnetization_y_direction,
                     dz=start_magnetization_z_direction,
-                    magnitude=1
+                    magnitude=1,
+                    unit=unitless_unit
                 )
             elif start_magnetization_type == "existing_model":
                 # .. process existing model field.
@@ -121,7 +124,7 @@ def create_initial_magnetization(session, json_model_dict):
                 else:
                     start_magnetization_unique_id = json_start_magnetization["unique_id"]
 
-                start_magnetization_model = session.query(Model).filter("unique_id").one_or_none()
+                start_magnetization_model = session.query(Model).filter(Model.unique_id == start_magnetization_unique_id).one_or_none()
                 if start_magnetization_model is None:
                     raise ValueError("New model JSON, start magnetization unique id '{}' not found.".format(
                         start_magnetization_unique_id

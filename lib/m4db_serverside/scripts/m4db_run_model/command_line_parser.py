@@ -7,7 +7,7 @@ from argparse import ArgumentParser
 
 def command_line_parser():
     r"""
-    Create a command line parser to handle mode runner actions.
+    Create a command line parser to handle model runner actions.
     Returns: a command line parser
     """
     parser = ArgumentParser()

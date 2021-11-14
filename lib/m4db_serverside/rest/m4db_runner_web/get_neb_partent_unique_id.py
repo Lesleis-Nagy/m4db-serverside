@@ -7,11 +7,11 @@ import json
 from m4db_database.orm.latest import NEB
 
 
-class IsNEBParentless:
+class GetNEBParentUniqueId:
 
     def on_get(self, req, resp, unique_id):
         r"""
-        Return True if the NEB has a parent, otherwise false.
+        Return the unique id of the parent of the NEB (if it exists).
         :param req: the request object.
         :param resp: the response object.
         :param unique_id: the unique identifier of an NEB.
@@ -22,8 +22,8 @@ class IsNEBParentless:
 
         if neb.parent_neb is None:
             # The NEB is parentless.
-            return_value = True
+            return_value = None
         else:
-            return_value = False
+            return_value = neb.parent_neb.unique_id
 
         resp.text = json.dumps({"return": return_value})

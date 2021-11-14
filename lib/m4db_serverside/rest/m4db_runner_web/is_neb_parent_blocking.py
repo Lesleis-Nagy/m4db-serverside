@@ -7,7 +7,7 @@ import json
 from m4db_database.orm.latest import NEB
 
 
-class IsParentBlocking:
+class IsNEBParentBlocking:
 
     def on_get(self, req, resp, unique_id):
         r"""
@@ -32,4 +32,4 @@ class IsParentBlocking:
                 # The parent has some status other than finished and so it blocks.
                 return_value = True
 
-        resp.body = json.dumps({"return": return_value})
+        resp.text = json.dumps({"return": return_value})

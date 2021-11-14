@@ -27,5 +27,5 @@ def get_neb_merrill_script(unique_id, output_file):
     response.raise_for_status()
 
     output = json.loads(response.text)
-    with open(output_file, "bw") as fout:
+    with open(output_file, "w") as fout:
         fout.write(output["return"])

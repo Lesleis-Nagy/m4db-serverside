@@ -3,6 +3,7 @@ ReadTecplotPath {{ neb.neb_initial_path_name }}
 set MaxEnergyEvaluations {{ neb.max_energy_evaluations }}
 set MaxPathEvaluations {{ neb.max_path_evaluations }}
 
+! Material data
 {% for material in neb.materials %}
 ! Subdomain {{ material.submesh_id }}, {{ material.name }} at {{ material.temperature }}C
 setsubdomain {{ material.submesh_id }} MS {{ material.ms }}

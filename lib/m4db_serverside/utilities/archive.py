@@ -32,6 +32,22 @@ def archive_dir(directory):
                 zout.close()
 
 
+def unarchive_to_dir(archive, directory):
+    r"""
+    Unarchive a file to the given directory.
+    :param archive: the source archive
+    :param directory: the destination directory.
+    :return: None
+    """
+    if not os.path.isfile(archive):
+        raise ValueError(f"The source archive '{archive}' does not exist")
+    if not os.path.isdir(directory):
+        raise ValueError(f"The destination directory '{directory}' does not exist")
+
+    with zipfile.ZipFile(archive, "r") as zout:
+        zout.extractall(directory)
+
+
 def archive_model(unique_id):
     r"""
     Archive a model.
@@ -65,3 +81,40 @@ def archive_neb(unique_id):
 
     archive_dir(neb_path)
 
+
+def unarchive_model(unique_id, destination):
+    r"""
+    Unarchive a model.
+    :param unique_id: the unique Id of a model.
+    :param destination: the destination where the archive is placed.
+    :return: the absolute path directory in which the model has been unarchived
+    """
+    config = read_config_from_environ()
+
+    model_archive = os.path.join(
+        config["file_root"],
+        global_vars.model_directory_name,
+        uid_to_dir(unique_id),
+        global_vars.data_zip
+    )
+
+    unarchive_to_dir(model_archive, destination)
+
+
+def unarchive_neb(unique_id, destination):
+    r"""
+    Unarchive an NEB.
+    :param unique_id: the unique ID of an NEB.
+    :param destination: the destination where the NEB is placed.
+    :return: the absolute path directory in which the NEB has been archived.
+    """
+    config = read_config_from_environ()
+
+    model_archive = os.path.join(
+        config["file_root"],
+        global_vars.neb_directory_name,
+        uid_to_dir(unique_id),
+        global_vars.data_zip
+    )
+
+    unarchive_to_dir(model_archive, destination)

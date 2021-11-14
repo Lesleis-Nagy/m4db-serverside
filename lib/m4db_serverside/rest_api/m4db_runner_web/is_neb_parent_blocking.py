@@ -9,7 +9,7 @@ from m4db_database.configuration import read_config_from_environ
 from m4db_serverside.rest_api.sessions import get_session
 
 
-def is_parent_blocking(unique_id):
+def is_neb_parent_blocking(unique_id):
     r"""
     Retrieve whether the parent is blocking the execution of this NEB. If
     False, then either the NEB associated with this `unique_id` is finished
@@ -25,7 +25,7 @@ def is_parent_blocking(unique_id):
     host = config["m4db_runner_web"]["host"]
     port = config["m4db_runner_web"]["port"]
 
-    service_url = f"{protocol}://{host}:{port}/is_parent_blocking/{unique_id}"
+    service_url = f"{protocol}://{host}:{port}/is_neb_parent_blocking/{unique_id}"
     session = get_session()
     response = session.get(service_url)
     response.raise_for_status()

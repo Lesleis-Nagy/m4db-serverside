@@ -21,9 +21,7 @@ def runner_data_with_parent(neb):
 
     # The initial path is the path belonging to the parent of this child.
     runner_data["neb_initial_path_name"] = os.path.join(
-        config["file_root"],
-        global_vars.neb_directory_name,
-        uid_to_dir(neb.parent_neb.unique_id),
+        neb.parent_neb.unique_id,
         global_vars.neb_tecplot_file_name
     )
 
@@ -31,9 +29,9 @@ def runner_data_with_parent(neb):
     runner_data["max_path_evaluations"] = neb.max_path_evaluations
 
     # NEB material data is taken from the start model (both start and end models should be the same).
-    runner_data["material"] = []
+    runner_data["materials"] = []
     for mma in neb.start_model.materials:
-        runner_data["material"].append({
+        runner_data["materials"].append({
             "submesh_id": mma.submesh_id,
             "name": mma.material.name,
             "temperature": mma.material.temperature,
@@ -81,9 +79,9 @@ def runner_data_without_parent(neb):
     runner_data["max_path_evaluations"] = neb.max_path_evaluations
 
     # NEB material data is taken from the start model (both start and end models should be the same).
-    runner_data["material"] = []
+    runner_data["materials"] = []
     for mma in neb.start_model.materials:
-        runner_data["material"].append({
+        runner_data["materials"].append({
             "submesh_id": mma.submesh_id,
             "name": mma.material.name,
             "temperature": mma.material.temperature,
@@ -107,15 +105,11 @@ def runner_data_without_parent(neb):
 
     # Start and end models.
     runner_data["start_magnetization"] = os.path.join(
-        config["file_root"],
-        global_vars.neb_directory_name,
-        uid_to_dir(neb.start_model.unique_id),
+        neb.start_model.unique_id,
         global_vars.magnetization_dat_file_name
     )
     runner_data["end_magnetization"] = os.path.join(
-        config["file_root"],
-        global_vars.neb_directory_name,
-        uid_to_dir(neb.end_model.unique_id),
+        neb.end_model.unique_id,
         global_vars.magnetization_dat_file_name
     )
 
@@ -153,4 +147,4 @@ class GetNEBMerrillScript:
             runner_data = runner_data_without_parent(neb)
             merrill_template = template_env("merrill").get_template("merrill_neb_root_path.jinja2")
 
-        resp.body = json.dumps({"return": merrill_template.render(neb=runner_data)})
+        resp.text = json.dumps({"return": merrill_template.render(neb=runner_data)})

@@ -15,6 +15,7 @@ from m4db_database.orm.latest import ModelField
 
 from m4db_serverside import global_vars
 from m4db_serverside.templates import template_env
+from m4db_serverside.utilities.archive import unarchive_model
 
 
 class GetModelMerrillScript:
@@ -61,12 +62,11 @@ class GetModelMerrillScript:
                 "z": model.start_magnetization.dir_z
             }
         elif isinstance(model.start_magnetization, ModelField):
+            # Unpack the model
             runner_data["start_magnetization"] = {
                 "type": "model",
                 "dat_file": os.path.join(
-                    config["file_root"],
-                    global_vars.model_directory_name,
-                    uid_to_dir(model.start_magnetization.model.unique_id),
+                    model.start_magnetization.model.unique_id,
                     global_vars.magnetization_dat_file_name
                 )
             }
@@ -101,4 +101,4 @@ class GetModelMerrillScript:
 
         merrill_template = template_env("merrill").get_template("merrill_model.jinja2")
 
-        resp.body = json.dumps({"return": merrill_template.render(model=runner_data)})
+        resp.text = json.dumps({"return": merrill_template.render(model=runner_data)})

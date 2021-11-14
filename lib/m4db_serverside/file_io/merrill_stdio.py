@@ -5,7 +5,7 @@ A collection of routines to extract information form merrill stdout files.
 import re
 
 
-def read_merrill_stdout(str_stdout):
+def read_merrill_model_stdout(str_stdout):
     r"""
     This function will parse some merrill standard output and produce a python dictionary of values (see output).
 
@@ -299,3 +299,90 @@ def extract_path_data(file_name):
 
     return parse_data
 
+
+def extract_path_type(file_name):
+    r"""
+    Extracts the path type information from 'file_name'.
+    :param file_name: NEB path file.
+    :return: a string: INITIAL_PATH, NEB_PATH, UNKNOWN_PATH
+    """
+    regex_initial_path = re.compile(r"MakeInitialPath")
+    regex_neb_path = re.compile(r"PathMinimize")
+
+    with open(file_name, "r", errors="ignore") as fin:
+        for line in fin:
+            match_initial_path = regex_initial_path.search(line, re.IGNORECASE)
+            if match_initial_path:
+                return "INITIAL_PATH"
+            match_neb_path = regex_neb_path.search(line, re.IGNORECASE)
+            if match_neb_path:
+                return "NEB_PATH"
+
+    return "UNKNOWN_PATH"
+
+
+def count_path_fails_and_minimized(file_name):
+    r"""
+    Counts the failures / successful minimizations from 'file_name'
+    :param file_name:
+    :return:
+    """
+    regex_failed_to_converge = re.compile(r'FAILED TO CONVERGE')
+    regex_minimization_finished = re.compile(r"MINIMIZATION FINISHED")
+
+    n_failures = 0
+    n_minimizations = 0
+    with open(file_name, "r", errors="ignore") as fin:
+        for line in fin:
+            match_failed_to_converge = regex_failed_to_converge.search(line)
+            if match_failed_to_converge:
+                n_failures += 1
+                continue
+            match_minimization_finished = regex_minimization_finished.search(line)
+            if match_minimization_finished:
+                n_minimizations += 1
+                continue
+
+    return n_failures, n_minimizations
+
+
+def is_merrill_model_finished(file_name):
+    r"""
+    Assesses whether a merrill model standard output corresponds with a finished model.
+    :param file_name: the merrill model standard output file name.
+    :return: True if the model corresponds with a 'finished' state, otherwise False.
+    """
+    regex_max_energy_evaluations_reached = re.compile(r'MAX Energy Evaluations reached')
+    regex_gradient_negligible = re.compile(r'GRADIENT Negligible')
+    regex_delta_f_negligible = re.compile(r'Delta F negligible')
+
+    contains_gradient_negligible = False
+    contains_delta_f_negligible = False
+
+    with open(file_name, "r", errors="ignore") as fin:
+        for line in fin:
+            match_max_energy_evaluations_reached = regex_max_energy_evaluations_reached.search(line)
+            if match_max_energy_evaluations_reached:
+                # We reached the maximum no. of energy evaluations and so did *not* converge.
+                return False
+
+            match_gradient_negligible = regex_gradient_negligible.search(line)
+            if match_gradient_negligible:
+                # Set flag to indicate that gradient was negligible.
+                contains_gradient_negligible = True
+                continue
+
+            match_delta_f_negligible = regex_delta_f_negligible.search(line)
+            if match_delta_f_negligible:
+                # Set flag to indicate that delta f was negligible.
+                contains_delta_f_negligible = True
+                continue
+
+    # If flow reaches here, then we didn't reach maximum no. of energy evaluations
+
+    if contains_gradient_negligible or contains_delta_f_negligible:
+        # If we *did* find message telling us that the gradient or delta f were negligible
+        return True
+    else:
+        # We found no message telling us that gradient or delta f was negligible
+        return False

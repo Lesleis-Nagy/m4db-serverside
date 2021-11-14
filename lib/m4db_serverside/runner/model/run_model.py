@@ -23,7 +23,8 @@ from m4db_serverside.rest_api.m4db_runner_web.get_model_software_executable impo
 from m4db_serverside.rest_api.m4db_runner_web.set_model_running_status import set_model_running_status
 from m4db_serverside.rest_api.m4db_runner_web.set_model_quants import set_model_quants
 
-from m4db_serverside.file_io.merrill_stdio import read_merrill_stdout
+from m4db_serverside.file_io.merrill_stdio import is_merrill_model_finished
+from m4db_serverside.file_io.merrill_stdio import read_merrill_model_stdout
 
 from m4db_serverside.postprocessing.field_calculations import tec_to_unstructured_grid
 from m4db_serverside.postprocessing.field_calculations import net_quantities
@@ -45,9 +46,9 @@ def run_model(unique_id):
     # Wait a random amount of time based on unique_id.
     random.seed(unique_id)
     wait_time = random.randint(1, 20)
-    print(f"waiting for {wait_time}s")
+    logger.info(f"waiting for {wait_time}s")
     time.sleep(wait_time)
-    print("activating ...")
+    logger.info("activating ...")
 
     # This is the final destination of model data.
     database_dir = os.path.join(
@@ -60,11 +61,20 @@ def run_model(unique_id):
     # This is the working directory.
     working_dir = config["m4db_serverside"]["working_dir"]
 
-    with tempfile.TemporaryDirectory(dir=working_dir) as tmpdir:
+    # These lines are useful for testing
+    tmpdir = os.path.join(working_dir, "mytemp")
+    os.makedirs(tmpdir, exist_ok=True)
+    if os.path.isdir(tmpdir):
+
+    #with tempfile.TemporaryDirectory(dir=working_dir) as tmpdir:
         logger.debug(f"working directory: '{tmpdir}'")
 
         # Switch to the working directory.
         os.chdir(tmpdir)
+
+        # If this is a model, then unarchive
+        logger.debug(f"unarchiving model '{model.start_magnetization.model.unique_id}' to '{os.getcwd()}'")
+        unarchive_model(model.start_magnetization.model.unique_id, ".")
 
         # Get the executable.
         executable = get_model_software_executable(unique_id)
@@ -90,33 +100,42 @@ def run_model(unique_id):
             shell=True
         )
         stdout, stderr = proc.communicate()
-        merrill_t1 = time.time()
-        time_taken = merrill_t1 - merrill_t0
-        logger.debug(f"merrill completed after {time_taken}s")
-
-        # Check whether a file called "magnetization_mult.tec" was created - if so then rename it.
-        if os.path.isfile(global_vars.magnetization_mult_tecplot_file_name):
-            os.rename(global_vars.magnetization_mult_tecplot_file_name, global_vars.magnetization_tecplot_file_name)
 
         # Write standard output and standard error to files.
+        logger.debug("Writing merrill standard output and standard error files.")
         with open(global_vars.model_stdout_file_name, "w") as fout:
             fout.write(stdout)
         with open(global_vars.model_stderr_file_name, "w") as fout:
             fout.write(stderr)
 
+        merrill_t1 = time.time()
+        time_taken = merrill_t1 - merrill_t0
+        logger.info(f"merrill completed after {time_taken}s")
+
+        # Check whether a file called "magnetization_mult.tec" was created - if so then rename it.
+        if os.path.isfile(global_vars.magnetization_mult_tecplot_file_name):
+            logger.debug(fr"renaming {global_vars.magnetization_mult_tecplot_file_name} to {global_vars.magnetization_tecplot_file_name}")
+            os.rename(global_vars.magnetization_mult_tecplot_file_name, global_vars.magnetization_tecplot_file_name)
+
         # Check output.
+        logger.debug("Checking output")
+
+        is_finished = is_merrill_model_finished(global_vars.model_stdout_file_name)
+        if not is_finished:
+            logger.debug(f"Model unique id {unique_id} is *NOT* in finished state, setting for re-run")
+            set_model_running_status(unique_id, "re-run")
+
         with open(global_vars.model_stdout_file_name) as fin:
             stdout_contents = fin.readlines()
-        quants1 = read_merrill_stdout(stdout_contents)
-        if quants1["failed"]:
-            set_model_running_status(unique_id, "re-run")
-            return
+        quants1 = read_merrill_model_stdout(stdout_contents)
 
         # Calculate additional quants.
+        logger.debug("Calculating quants")
         ug, tec_raw = tec_to_unstructured_grid(global_vars.magnetization_tecplot_file_name)
         quants2 = net_quantities(ug)
 
         # Save a JSON version of our model.
+        logger.debug("Creating quant file")
         with open(global_vars.magnetization_json_file_name, "w") as fout:
             fout.write(json.dumps(tec_raw, cls=NumpyEncoder))
 
@@ -145,21 +164,22 @@ def run_model(unique_id):
         # Compress each file in the directory.
         logger.debug("Zipping files")
         src_files = os.listdir(".")
-        src_zip_file = "data.zip"
+        src_zip_file = global_vars.data_zip
         zout = zipfile.ZipFile(src_zip_file, "w", zipfile.ZIP_DEFLATED)
         for src_file in src_files:
             logger.debug(f"{src_file} --> {src_zip_file}")
             zout.write(src_file)
         zout.close()
 
-        # Copy all files to the final destination
+        # Copy the zipped archive to the final destination
         os.makedirs(database_dir, exist_ok=True)
+        shutil.copy(src_zip_file, database_dir)
 
-        src_files = os.listdir(".")
-        for file_name in src_files:
-            if os.path.isfile(file_name):
-                logger.debug(f"Copying over file {file_name}")
-                shutil.copy(file_name, database_dir)
+        # src_files = os.listdir(".")
+        # for file_name in src_files:
+        #     if os.path.isfile(file_name):
+        #         logger.debug(f"Copying over file {file_name}")
+        #         shutil.copy(file_name, database_dir)
 
         # Set to finished.
         set_model_running_status(unique_id, "finished")

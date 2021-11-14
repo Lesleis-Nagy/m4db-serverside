@@ -8,7 +8,7 @@ import json
 
 class DecimalEncoder(json.JSONEncoder):
     r"""
-    Helper class to encode deimal values.
+    Helper class to encode decimal values.
     """
     def default(self, o):
         if isinstance(o, decimal.Decimal):

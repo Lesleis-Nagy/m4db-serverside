@@ -34,8 +34,9 @@ class global_vars:
     neb_merrill_script_file_name = "neb_script.merrill"
     neb_stdout_file_name = "neb_stdout.txt"
     neb_stderr_file_name = "neb_stderr.txt"
-
+    neb_mult_tecplot_file_name = "neb_mult.tec"
     neb_tecplot_file_name = "neb.tec"
+    neb_path_json = "neb_path.json"
 
     running_status_not_run = "not-run"
     running_status_re_run = "re-run"
