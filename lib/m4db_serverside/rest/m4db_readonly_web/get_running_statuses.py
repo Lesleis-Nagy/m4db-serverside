@@ -33,4 +33,4 @@ class GetRunningStatuses:
                 "description": running_status.description
             })
 
-        resp.body = json.dumps(response)
+        resp.text = json.dumps(response)

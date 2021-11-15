@@ -7,9 +7,10 @@ import simplejson as json
 
 from m4db_database.orm.latest import Geometry
 from m4db_database.orm.latest import Unit
+from m4db_database.orm.latest import SizeConvention
 
 
-class GetGeometryNames:
+class GetAllGeometryNames:
     r"""
     Falcon service to retrieve unique geometry names.
     """
@@ -52,8 +53,9 @@ class GetGeometrySizes:
         :return: None
         """
 
-        records = self.session.query(Geometry.size, Unit.symbol).\
+        records = self.session.query(Geometry.size, Unit.symbol, SizeConvention.symbol).\
             join(Unit, Geometry.size_unit_id == Unit.id).\
+            join(SizeConvention, Geometry.size_convention_id == SizeConvention.id).\
             filter(Geometry.name == geometry_name).\
             distinct().all()
 
@@ -65,6 +67,7 @@ class GetGeometrySizes:
             {
                 "size": record[0],
                 "unit": record[1],
+                "convention": record[2]
             }
             for record in records
         ]

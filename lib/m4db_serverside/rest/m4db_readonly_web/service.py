@@ -1,13 +1,16 @@
 import falcon
 
+from m4db_database.configuration import read_config_from_environ
 from m4db_database.sessions import get_session
+from m4db_database.utilities_logging import get_logger
 
 from m4db_serverside.rest.middleware import SQLAlchemySessionManager
+from m4db_serverside.rest.middleware import ConfigurationManager
+from m4db_serverside.rest.middleware import LoggerManager
 
-from m4db_serverside.rest.m4db_readonly_web.get_model_tecplot_file import GetModelTecplotFile
-from m4db_serverside.rest.m4db_readonly_web.get_model_tecplot_file import GetModelTecplotFileZip
-from m4db_serverside.rest.m4db_readonly_web.get_model_tecplot_file import GetModelJSONFile
-from m4db_serverside.rest.m4db_readonly_web.get_model_tecplot_file import GetModelJSONFileZip
+from m4db_serverside.rest.m4db_readonly_web.get_model_file import GetModelDataZip
+from m4db_serverside.rest.m4db_readonly_web.get_model_file import GetModelJSONZip
+from m4db_serverside.rest.m4db_readonly_web.get_model_file import GetModelTecplotZip
 
 from m4db_serverside.rest.m4db_readonly_web.get_running_statuses import GetRunningStatuses
 
@@ -15,54 +18,36 @@ from m4db_serverside.rest.m4db_readonly_web.get_software_items import GetSoftwar
 
 from m4db_serverside.rest.m4db_readonly_web.get_projects import GetProjects
 
-from m4db_serverside.rest.m4db_readonly_web.get_geometry import GetGeometryNames
+from m4db_serverside.rest.m4db_readonly_web.get_geometry import GetAllGeometryNames
 from m4db_serverside.rest.m4db_readonly_web.get_geometry import GetGeometrySizes
 
-from m4db_serverside.rest.m4db_readonly_web.get_neb_tecplot_file import GetNebTecplotFile
-from m4db_serverside.rest.m4db_readonly_web.get_neb_path_energies import GetNEBPathEnergiesCSV
-
 Session = get_session(scoped=True, echo=False)
-
+config = read_config_from_environ()
+logger = get_logger()
 app = falcon.App(
     middleware=[
-        SQLAlchemySessionManager(Session)
+        SQLAlchemySessionManager(Session),
+        ConfigurationManager(config),
+        LoggerManager(logger)
     ]
 )
 
-# Service to get model tecplot file.
-get_model_tecplot_file = GetModelTecplotFile()
+# Service to get a model data.zip.
+get_model_data_zip = GetModelDataZip()
 app.add_route(
-    "/model/tecplot/{unique_id}", get_model_tecplot_file
+    "/model/{unique_id}.zip", get_model_data_zip
 )
 
-# Service to get a model tecplot file as a zip.
-get_model_tecplot_file_zip = GetModelTecplotFileZip()
+# Service to get an archived version of the model data as JSON
+get_model_json_zip = GetModelJSONZip()
 app.add_route(
-    "/model/tecplot/zip/{unique_id}", get_model_tecplot_file_zip
+    "/model/json/{unique_id}.zip", get_model_json_zip
 )
 
-# Service to get a model JSON file.
-get_model_json_file = GetModelJSONFile()
+# Service to get an archived version of the model data as tecplot
+get_model_tecplot_zip = GetModelTecplotZip()
 app.add_route(
-    "/model/json/{unique_id}", get_model_json_file
-)
-
-# Service to get a zipped model JSON file.
-get_model_json_file_zipped = GetModelJSONFileZip()
-app.add_route(
-    "/model/json/zip/{unique_id}", get_model_json_file_zipped
-)
-
-# Service to get NEB tecplot file.
-get_neb_tecplot_file = GetNebTecplotFile()
-app.add_route(
-    "/neb/tecplot/{unique_id}", get_neb_tecplot_file
-)
-
-# Service to get NEB path energy data as a csv file.
-get_neb_path_energies_csv = GetNEBPathEnergiesCSV()
-app.add_route(
-    "/neb/path/csv/{unique_id}", get_neb_path_energies_csv
+    "/model/tecplot/{unique_id}.zip", get_model_tecplot_zip
 )
 
 # Service to get running statuses
@@ -84,9 +69,9 @@ app.add_route(
 )
 
 # Service to get geometry names.
-get_geometry_names = GetGeometryNames()
+get_all_geometry_names = GetAllGeometryNames()
 app.add_route(
-    "/geometry-names", get_geometry_names
+    "/get-all-geometry-names", get_all_geometry_names
 )
 
 # Service to get geometry sizes.
