@@ -65,9 +65,9 @@ class GetModelMerrillScript:
             # Unpack the model
             runner_data["start_magnetization"] = {
                 "type": "model",
-                "dat_file": os.path.join(
+                "tec_file": os.path.join(
                     model.start_magnetization.model.unique_id,
-                    global_vars.magnetization_dat_file_name
+                    global_vars.magnetization_tecplot_file_name
                 )
             }
 

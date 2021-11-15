@@ -9,6 +9,7 @@ import random
 import time
 import zipfile
 import json
+import uuid
 
 from subprocess import Popen, PIPE
 
@@ -66,9 +67,9 @@ def run_neb(unique_id):
     # Create the temporary directory within the working directory.
 
     # These lines are useful for testing
-    # tmpdir = os.path.join(working_directory, "mytemp")
-    # os.makedirs(tmpdir, exist_ok=True)
-    # if os.path.isdir(tmpdir):
+    #tmpdir = os.path.join(working_directory, str(uuid.uuid4()))
+    #os.makedirs(tmpdir, exist_ok=True)
+    #if os.path.isdir(tmpdir):
 
     with tempfile.TemporaryDirectory(dir=working_directory) as tmpdir:
         logger.debug(f"temporary working directory: '{tmpdir}'")

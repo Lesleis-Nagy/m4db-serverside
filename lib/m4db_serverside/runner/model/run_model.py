@@ -8,6 +8,7 @@ import tempfile
 import random
 import time
 import zipfile
+import uuid
 
 import simplejson as json
 import numpy as np
@@ -20,14 +21,18 @@ from m4db_database.utilities import uid_to_dir
 
 from m4db_serverside.rest_api.m4db_runner_web.get_model_merrill_script import get_model_merrill_script
 from m4db_serverside.rest_api.m4db_runner_web.get_model_software_executable import get_model_software_executable
+from m4db_serverside.rest_api.m4db_runner_web.get_model_start_magnetization import get_model_start_magnetization
 from m4db_serverside.rest_api.m4db_runner_web.set_model_running_status import set_model_running_status
 from m4db_serverside.rest_api.m4db_runner_web.set_model_quants import set_model_quants
+
 
 from m4db_serverside.file_io.merrill_stdio import is_merrill_model_finished
 from m4db_serverside.file_io.merrill_stdio import read_merrill_model_stdout
 
 from m4db_serverside.postprocessing.field_calculations import tec_to_unstructured_grid
 from m4db_serverside.postprocessing.field_calculations import net_quantities
+
+from m4db_serverside.utilities.archive import unarchive_model
 
 from m4db_serverside import global_vars
 
@@ -58,28 +63,51 @@ def run_model(unique_id):
     )
     logger.debug(f"model destination: '{database_dir}")
 
+    # Retrieve the model's start magnetization data
+    start_magnetization = get_model_start_magnetization(unique_id)
+    logger.debug(f"model start magnetization info: {start_magnetization}")
+
     # This is the working directory.
     working_dir = config["m4db_serverside"]["working_dir"]
 
     # These lines are useful for testing
-    tmpdir = os.path.join(working_dir, "mytemp")
-    os.makedirs(tmpdir, exist_ok=True)
-    if os.path.isdir(tmpdir):
+    #tmpdir = os.path.join(working_dir, str(uuid.uuid4()))
+    #logger.debug(f"working directory: '{tmpdir}'")
+    #os.makedirs(tmpdir, exist_ok=True)
+    #if os.path.isdir(tmpdir):
 
-    #with tempfile.TemporaryDirectory(dir=working_dir) as tmpdir:
+    with tempfile.TemporaryDirectory(dir=working_dir) as tmpdir:
         logger.debug(f"working directory: '{tmpdir}'")
 
         # Switch to the working directory.
         os.chdir(tmpdir)
 
-        # If this is a model, then unarchive
-        logger.debug(f"unarchiving model '{model.start_magnetization.model.unique_id}' to '{os.getcwd()}'")
-        unarchive_model(model.start_magnetization.model.unique_id, ".")
+        # If this model's start magnetization is an existing model, then ...
+        start_magnetization_type = start_magnetization["type"]
+        if start_magnetization_type == "model":
+            # retrieve the start magnetization unique ID
+            start_magnetization_unique_id = start_magnetization["unique_id"]
+            # retrieve the start magnetization running status
+            start_magnetization_running_status = start_magnetization["running_status"]
+
+            # If this model's start magnetization is in a finished state, then ...
+            if start_magnetization_running_status == "finished":
+                # ... unarchive the model
+                start_magnetization_unique_id = start_magnetization["unique_id"]
+                logger.debug(f"model {unique_id} requires model {start_magnetization_unique_id} ... unarchiving")
+                os.makedirs(start_magnetization_unique_id, exist_ok=True)
+                unarchive_model(start_magnetization_unique_id, start_magnetization_unique_id)
+            else:
+                # ... otherwise write to debug log and end.
+                logger.debug(
+                    f"model {unique_id} requires model {start_magnetization_unique_id} "
+                    f"but its running status is {start_magnetization_running_status}")
+                return
 
         # Get the executable.
         executable = get_model_software_executable(unique_id)
 
-        # Create a Merrill scripts.
+        # Create a Merrill script.
         get_model_merrill_script(unique_id, global_vars.model_merrill_script_file_name)
 
         # Set the running status to 'running'
@@ -101,6 +129,12 @@ def run_model(unique_id):
         )
         stdout, stderr = proc.communicate()
 
+        # Remove start model data if it was present
+        if start_magnetization_type == "model":
+            start_magnetization_unique_id = start_magnetization["unique_id"]
+            logger.debug(f"removing start model directory {start_magnetization_unique_id}")
+            shutil.rmtree(start_magnetization_unique_id)
+
         # Write standard output and standard error to files.
         logger.debug("Writing merrill standard output and standard error files.")
         with open(global_vars.model_stdout_file_name, "w") as fout:
@@ -119,11 +153,11 @@ def run_model(unique_id):
 
         # Check output.
         logger.debug("Checking output")
-
         is_finished = is_merrill_model_finished(global_vars.model_stdout_file_name)
         if not is_finished:
             logger.debug(f"Model unique id {unique_id} is *NOT* in finished state, setting for re-run")
             set_model_running_status(unique_id, "re-run")
+            return
 
         with open(global_vars.model_stdout_file_name) as fin:
             stdout_contents = fin.readlines()
@@ -160,6 +194,8 @@ def run_model(unique_id):
                          e_exch4=quants1["exch4_energy"],
                          e_tot=quants1["tot_energy"],
                          volume=quants2["total_vol"])
+
+
 
         # Compress each file in the directory.
         logger.debug("Zipping files")

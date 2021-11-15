@@ -12,7 +12,7 @@ Randomize All Moments
 {% elif model.start_magnetization.type == "uniform" %}
 Uniform Magnetization {{ model.start_magnetization.x }} {{ model.start_magnetization.y }} {{ model.start_magnetization.z }}
 {% elif model.start_magnetization.type == "model" %}
-ReadMagnetization {{ model.start_magnetization.dat_file }}
+ReadTecplotZone {{ model.start_magnetization.tec_file }} 1
 {% endif %}
 
 {% for material in model.materials %}
