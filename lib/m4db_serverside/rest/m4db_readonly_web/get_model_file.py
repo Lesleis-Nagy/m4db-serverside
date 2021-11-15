@@ -47,7 +47,7 @@ def remove_temporary_dir(req, resp, resource):
     logger.debug(f"removed temporary directory {req.temp_dir}")
 
 
-class GetModelDataZip:
+class GetAllModelDataZip:
     r"""
     Falcon service to retrieve model data file as a zipped object.
     """

@@ -8,7 +8,7 @@ from m4db_serverside.rest.middleware import SQLAlchemySessionManager
 from m4db_serverside.rest.middleware import ConfigurationManager
 from m4db_serverside.rest.middleware import LoggerManager
 
-from m4db_serverside.rest.m4db_readonly_web.get_model_file import GetModelDataZip
+from m4db_serverside.rest.m4db_readonly_web.get_model_file import GetAllModelDataZip
 from m4db_serverside.rest.m4db_readonly_web.get_model_file import GetModelJSONZip
 from m4db_serverside.rest.m4db_readonly_web.get_model_file import GetModelTecplotZip
 
@@ -33,9 +33,9 @@ app = falcon.App(
 )
 
 # Service to get a model data.zip.
-get_model_data_zip = GetModelDataZip()
+get_all_model_data_zip = GetAllModelDataZip()
 app.add_route(
-    "/model/{unique_id}.zip", get_model_data_zip
+    "/model/all/{unique_id}.zip", get_all_model_data_zip
 )
 
 # Service to get an archived version of the model data as JSON
