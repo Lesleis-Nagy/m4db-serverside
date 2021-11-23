@@ -53,6 +53,7 @@ def add_fs_path_subparser(subparsers):
     subparser.add_argument("--external-field-unit",
                            default="mT", choices=["T", "mT", "uT", "nT"],
                            help="external field unit")
+    subparser.add_argument("--force-creation", action="store_true", help="disregard warnings and create the NEB")
 
     add_common_subparser_args(subparser)
     return subparser
@@ -75,6 +76,14 @@ def add_neb_child_path_subparser(subparsers):
     subparser.add_argument("--no-of-points", type=int, default=100, help="no. of points")
     subparser.add_argument("--max-energy-evaluations", type=int, help="max no. of energy evaluations")
     subparser.add_argument("--max-path-evaluations", type=int, help="max no. of path evaluations")
+    subparser.add_argument("--use-parent-external-field", action="store_true", help="if set then use the parent's external field.")
+    subparser.add_argument("--external-field-x", type=float, help="external field x-component")
+    subparser.add_argument("--external-field-y", type=float, help="external field y-component")
+    subparser.add_argument("--external-field-z", type=float, help="external field z-component")
+    subparser.add_argument("--external-field-strength", type=float, help="external field strength")
+    subparser.add_argument("--external-field-unit",
+                           default="mT", choices=["T", "mT", "uT", "nT"],
+                           help="external field unit")
 
     add_common_subparser_args(subparser)
     return subparser
@@ -105,6 +114,7 @@ def add_fs_path_with_neb_child_subparser(subparsers):
     subparser.add_argument("--external-field-unit",
                            default="mT", choices=["T", "mT", "uT", "nT"],
                            help="external field unit")
+    subparser.add_argument("--force", action="store_true", help="disregard warnings and create the NEB")
 
     add_common_subparser_args(subparser)
     return subparser
@@ -112,7 +122,7 @@ def add_fs_path_with_neb_child_subparser(subparsers):
 
 def add_uid_list_subparser(subparsers):
     r"""
-    Add a subparser to deal with retreiving (filtered) NEB unique IDs.
+    Add the unique ID list subparser. This subparser deals with retreiving (filtered) NEB unique IDs.
     :param subparsers: the subparsers object
     :return: the 'uid-list' subparser.
     """

@@ -19,7 +19,48 @@ from m4db_database.orm.latest import NEBCalculationType
 from m4db_serverside.db.neb.check_endpoint_exists import parent_path_with_models_exists
 
 
-class FSNEBPathKWArgs:
+class PathExternalFieldKWArgs:
+    kw_external_field_x = "external_field_x"
+    kw_external_field_y = "external_field_y"
+    kw_external_field_z = "external_field_z"
+    kw_external_field_strength = "external_field_strength"
+    kw_external_field_unit = "external_field_unit"
+
+    def __init__(self, **kwargs):
+        self.ext_field_complete = False
+        self.ext_field_empty = False
+        self.ext_field_x = None
+        if FSPathWithNEBChildKWArgs.kw_external_field_x in kwargs.keys():
+            self.ext_field_x = kwargs[FSPathWithNEBChildKWArgs.kw_external_field_x]
+
+        self.ext_field_y = None
+        if FSPathWithNEBChildKWArgs.kw_external_field_y in kwargs.keys():
+            self.ext_field_y = kwargs[FSPathWithNEBChildKWArgs.kw_external_field_y]
+
+        self.ext_field_z = None
+        if FSPathWithNEBChildKWArgs.kw_external_field_z in kwargs.keys():
+            self.ext_field_z = kwargs[FSPathWithNEBChildKWArgs.kw_external_field_z]
+
+        self.ext_field_strength = None
+        if FSPathWithNEBChildKWArgs.kw_external_field_strength in kwargs.keys():
+            self.ext_field_strength = kwargs[FSPathWithNEBChildKWArgs.kw_external_field_strength]
+
+        self.ext_field_unit = "mT"
+        if FSPathWithNEBChildKWArgs.kw_external_field_unit in kwargs.keys():
+            self.ext_field_unit = kwargs[FSPathWithNEBChildKWArgs.kw_external_field_unit]
+
+        self.ext_field_complete = self.ext_field_x is not None \
+                                  and self.ext_field_y is not None \
+                                  and self.ext_field_z is not None \
+                                  and self.ext_field_strength is not None
+
+        self.ext_field_empty = self.ext_field_x is None \
+                               and self.ext_field_y is None \
+                               and self.ext_field_z is None \
+                               and self.ext_field_strength is None
+
+
+class FSNEBPathKWArgs(PathExternalFieldKWArgs):
     kw_model_unique_id_one = "model_unique_id_one"
     kw_model_unique_id_two = "model_unique_id_two"
     kw_no_of_points = "no_of_points"
@@ -29,13 +70,12 @@ class FSNEBPathKWArgs:
     kw_db_user = "db_user"
     kw_software = "software"
     kw_software_version = "software_version"
-    kw_external_field_x = "external_field_x"
-    kw_external_field_y = "external_field_y"
-    kw_external_field_z = "external_field_z"
-    kw_external_field_strength = "external_field_strength"
-    kw_external_field_unit = "external_field_unit"
+    kw_force_creation = "force"
 
     def __init__(self, **kwargs):
+        # Initialize external field data.
+        super().__init__(**kwargs)
+
         config = read_config_from_environ()
 
         if FSNEBPathKWArgs.kw_model_unique_id_one not in kwargs.keys():
@@ -74,34 +114,12 @@ class FSNEBPathKWArgs:
         if FSNEBPathKWArgs.kw_software_version in kwargs.keys():
             self.software_version = kwargs[FSNEBPathKWArgs.kw_software_version]
 
-        # External field
-        self.ext_field_complete = False
-        self.ext_field_x = None
-        if FSNEBPathKWArgs.kw_external_field_x in kwargs.keys():
-            self.ext_field_x = kwargs[FSNEBPathKWArgs.kw_external_field_x]
-
-        self.ext_field_y = None
-        if FSNEBPathKWArgs.kw_external_field_y in kwargs.keys():
-            self.ext_field_y = kwargs[FSNEBPathKWArgs.kw_external_field_y]
-
-        self.ext_field_z = None
-        if FSNEBPathKWArgs.kw_external_field_z in kwargs.keys():
-            self.ext_field_z = kwargs[FSNEBPathKWArgs.kw_external_field_z]
-
-        self.ext_field_strength = 0.0
-        if FSNEBPathKWArgs.kw_external_field_strength in kwargs.keys():
-            self.ext_field_strength = kwargs[FSNEBPathKWArgs.kw_external_field_strength]
-
-        self.ext_field_unit = "mT"
-        if FSNEBPathKWArgs.kw_external_field_unit in kwargs.keys():
-            self.ext_field_unit = kwargs[FSNEBPathKWArgs.kw_external_field_unit]
-
-        self.ext_field_complete = self.ext_field_x is not None \
-                                  and self.ext_field_y is not None \
-                                  and self.ext_field_z is not None
+        self.force_creation = False
+        if FSNEBPathKWArgs.kw_software_version in kwargs.keys():
+            self.force_creation = kwargs[FSNEBPathKWArgs.kw_force_creation]
 
 
-class ChildNEBKWArgs:
+class ChildNEBKWArgs(PathExternalFieldKWArgs):
     kw_parent_unique_id = "parent_unique_id"
     kw_spring_constant = "spring_constant"
     kw_curvature_weight = "curvature_weight"
@@ -112,8 +130,12 @@ class ChildNEBKWArgs:
     kw_db_user = "db_user"
     kw_software = "software"
     kw_software_version = "software_version"
+    kw_use_parent_external_field = "use-parent-external-field"
 
     def __init__(self, **kwargs):
+        # Initialize external field data.
+        super().__init__(**kwargs)
+
         config = read_config_from_environ()
 
         if ChildNEBKWArgs.kw_parent_unique_id not in kwargs.keys():
@@ -156,8 +178,12 @@ class ChildNEBKWArgs:
         if ChildNEBKWArgs.kw_software_version in kwargs.keys():
             self.software_version = kwargs[ChildNEBKWArgs.kw_software_version]
 
+        self.use_parent_external_field = False
+        if ChildNEBKWArgs.kw_use_parent_external_field in kwargs.keys():
+            self.use_parent_external_field = kwargs[ChildNEBKWArgs.kw_use_parent_external_field]
 
-class FSPathWithNEBChildKWArgs:
+
+class FSPathWithNEBChildKWArgs(PathExternalFieldKWArgs):
     kw_model_id_one = "model_unique_id_one"
     kw_model_id_two = "model_unique_id_two"
     kw_spring_constant = "spring_constant"
@@ -169,13 +195,11 @@ class FSPathWithNEBChildKWArgs:
     kw_db_user = "db_user"
     kw_software = "software"
     kw_software_version = "software_version"
-    kw_external_field_x = "external_field_x"
-    kw_external_field_y = "external_field_y"
-    kw_external_field_z = "external_field_z"
-    kw_external_field_strength = "external_field_strength"
-    kw_external_field_unit = "external_field_unit"
 
     def __init__(self, **kwargs):
+        # Initialize external field data.
+        super().__init__(**kwargs)
+
         config = read_config_from_environ()
 
         if FSPathWithNEBChildKWArgs.kw_model_id_one not in kwargs.keys():
@@ -222,32 +246,6 @@ class FSPathWithNEBChildKWArgs:
         if FSPathWithNEBChildKWArgs.kw_software_version in kwargs.keys():
             self.software_version = kwargs[FSPathWithNEBChildKWArgs.kw_software_version]
 
-        # External field
-        self.ext_field_complete = False
-        self.ext_field_x = None
-        if FSPathWithNEBChildKWArgs.kw_external_field_x in kwargs.keys():
-            self.ext_field_x = kwargs[FSPathWithNEBChildKWArgs.kw_external_field_x]
-
-        self.ext_field_y = None
-        if FSPathWithNEBChildKWArgs.kw_external_field_y in kwargs.keys():
-            self.ext_field_y = kwargs[FSPathWithNEBChildKWArgs.kw_external_field_y]
-
-        self.ext_field_z = None
-        if FSPathWithNEBChildKWArgs.kw_external_field_z in kwargs.keys():
-            self.ext_field_z = kwargs[FSPathWithNEBChildKWArgs.kw_external_field_z]
-
-        self.ext_field_strength = 0.0
-        if FSPathWithNEBChildKWArgs.kw_external_field_strength in kwargs.keys():
-            self.ext_field_strength = kwargs[FSPathWithNEBChildKWArgs.kw_external_field_strength]
-
-        self.ext_field_unit = "mT"
-        if FSPathWithNEBChildKWArgs.kw_external_field_unit in kwargs.keys():
-            self.ext_field_unit = kwargs[FSPathWithNEBChildKWArgs.kw_external_field_unit]
-
-        self.ext_field_complete = self.ext_field_x is not None \
-                                  and self.ext_field_y is not None \
-                                  and self.ext_field_z is not None
-
 
 def create_fs_path(session, **kwargs):
     r"""
@@ -260,19 +258,31 @@ def create_fs_path(session, **kwargs):
     args = FSNEBPathKWArgs(**kwargs)
 
     unique_id = parent_path_with_models_exists(session, args.model_unique_id_one, args.model_unique_id_two)
-    if unique_id is not None:
-        # The path already exists so no model was created.
-        return unique_id, False
 
+    if unique_id is not None:
+        # If the user is *NOT* forcing creation of the path then return the existing path.
+        if not args.force_creation:
+            # The path already exists so no model was created.
+            print(f"FS path already exists, with {unique_id}")
+            return unique_id, False
+
+    # If the user is adding an external field
     if args.ext_field_complete:
-        unit = session.query(Unit).filter(Unit.symbol == "mT").one()
+        print(f"FS path external field information follows")
+        print(f"   x direction : {args.ext_field_x}")
+        print(f"   y direction : {args.ext_field_y}")
+        print(f"   z direction : {args.ext_field_z}")
+        print(f"   magnitude   : {args.ext_field_strength} {args.ext_field_unit}")
+        unit = session.query(Unit).filter(Unit.symbol == args.ext_field_unit).one()
         external_field = UniformField(dx=args.ext_field_x,
                                       dy=args.ext_field_y,
                                       dz=args.ext_field_z,
                                       magnitude=args.ext_field_strength,
                                       unit=unit)
-    else:
+    elif args.ext_field_empty:
         external_field = None
+    else:
+        raise ValueError("Field is partially defined, please define x, y, z direction and strength (in mT by default)")
 
     project = session.query(Project).filter(Project.name == args.project).one()
     db_user = session.query(DBUser).filter(DBUser.user_name == args.db_user).one()
@@ -319,8 +329,9 @@ def create_neb_child_path(session, **kwargs):
     # Retrieve the parent NEB.
     parent_neb = session.query(NEB).filter(NEB.unique_id == args.parent_unique_id).one()
 
-    # If the parent had an external field, re-use it.
-    if parent_neb.external_field is not None:
+    if args.use_parent_external_field:
+        # If the parent had an external field, re-use it
+        ext_field_inherited_from_parent = "yes"
         external_field = UniformField(
             dx=parent_neb.external_field.dir_x,
             dy=parent_neb.external_field.dir_y,
@@ -329,7 +340,32 @@ def create_neb_child_path(session, **kwargs):
             unit=parent_neb.external_field.unit
         )
     else:
-        external_field = None
+        # If we are given a complete external field then use it.
+        ext_field_inherited_from_parent = "no"
+        if args.ext_field_complete:
+            ext_field_inherited_from_parent = "no"
+            unit = session.query(Unit).filter(Unit.symbol == args.ext_field_unit).one()
+            external_field = UniformField(
+                dx=args.ext_field_x,
+                dy=args.ext_field_y,
+                dz=args.ext_field_z,
+                magnitude=args.ext_field_strength,
+                unit=unit
+            )
+        elif args.ext_field_empty:
+            external_field = None
+        else:
+            raise ValueError("Field is partially defined, please define x, y, z direction and strength (in mT by default)")
+
+    print(f"Child NEB path (parent '{parent_neb.unique_id}') external field information follows")
+    if external_field is not None:
+        print(f"    inherited? : {ext_field_inherited_from_parent}")
+        print(f"   x direction : {args.ext_field_x}")
+        print(f"   y direction : {args.ext_field_y}")
+        print(f"   z direction : {args.ext_field_z}")
+        print(f"   magnitude   : {args.ext_field_strength} {args.ext_field_unit}")
+    else:
+        print("   there is no external field")
 
     running_status = session.query(RunningStatus).filter(RunningStatus.name == "not-run").one()
 

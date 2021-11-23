@@ -195,8 +195,6 @@ def run_model(unique_id):
                          e_tot=quants1["tot_energy"],
                          volume=quants2["total_vol"])
 
-
-
         # Compress each file in the directory.
         logger.debug("Zipping files")
         src_files = os.listdir(".")
