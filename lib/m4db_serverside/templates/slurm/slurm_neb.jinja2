@@ -9,7 +9,12 @@
 #SBATCH --time={{sdata.time}}
 #SBATCH --chdir={{sdata.working_directory}}
 
-module load m4db-database/1.0.0
-module load m4db-serverside/1.0.0
+# Load modules
+export MODULEPATH={{sdata.module_dir}}
+{% for module in sdata.modules %}
+    module load {{ module }}
+{% endfor %}
 
-srun -N 1
+# Run model
+srun -N 1 m4db_run_neb {{sdata.unique_id}}
+
