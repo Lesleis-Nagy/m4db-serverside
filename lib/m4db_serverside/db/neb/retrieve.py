@@ -30,13 +30,15 @@ def get_nebs(session, **kwargs):
     # NEB path should be the same in this regard.
     neb_query = session.query(NEB). \
         join(Model, Model.id == NEB.start_model_id). \
-        join(RunningStatus, Model.running_status_id == RunningStatus.id). \
+        join(RunningStatus, NEB.running_status_id == RunningStatus.id). \
         join(Geometry, Geometry.id == Model.geometry_id). \
         join(Unit, Unit.id == Geometry.size_unit_id). \
         join(SizeConvention, SizeConvention.id == Geometry.size_convention_id). \
         join(Metadata, Metadata.id == Model.mdata_id). \
         join(DBUser, DBUser.id == Metadata.db_user_id). \
         join(Software, Software.id == Metadata.software_id)
+
+    print(f"running_status in the query: {kwargs['running_status']}")
 
     # Deal with the running status
     if "running_status" in kwargs.keys():

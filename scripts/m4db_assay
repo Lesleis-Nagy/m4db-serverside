@@ -1,15 +1,18 @@
 #!python
 
 from m4db_serverside.scripts.m4db_assay.command_line_parser import command_line_parser
-from m4db_serverside.scripts.m4db_assay.actions import general_action
+from m4db_serverside.scripts.m4db_assay.actions import model_general_action
+from m4db_serverside.scripts.m4db_assay.actions import neb_general_action
 
 
 def main():
     parser = command_line_parser()
     args = parser.parse_args()
 
-    if args.command == "general":
-        general_action()
+    if args.command == "model-general":
+        model_general_action()
+    elif args.command == "neb-general":
+        neb_general_action()
     else:
         parser.print_help()
 

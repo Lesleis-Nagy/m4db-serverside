@@ -12,6 +12,8 @@ from m4db_serverside.rest.m4db_readonly_web.get_model_file import GetAllModelDat
 from m4db_serverside.rest.m4db_readonly_web.get_model_file import GetModelJSONZip
 from m4db_serverside.rest.m4db_readonly_web.get_model_file import GetModelTecplotZip
 
+from m4db_serverside.rest.m4db_readonly_web.get_neb_file import GetAllNEBDataZip
+
 from m4db_serverside.rest.m4db_readonly_web.get_running_statuses import GetRunningStatuses
 
 from m4db_serverside.rest.m4db_readonly_web.get_software_items import GetSoftwareItems
@@ -48,6 +50,12 @@ app.add_route(
 get_model_tecplot_zip = GetModelTecplotZip()
 app.add_route(
     "/model/tecplot/{unique_id}.zip", get_model_tecplot_zip
+)
+
+# Service to get an NEB data.zip.
+get_all_neb_data_zip = GetAllNEBDataZip()
+app.add_route(
+    "/neb/all/{unique_id}.zip", get_all_neb_data_zip
 )
 
 # Service to get running statuses

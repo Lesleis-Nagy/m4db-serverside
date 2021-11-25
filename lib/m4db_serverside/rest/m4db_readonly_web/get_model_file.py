@@ -5,46 +5,21 @@ A collection of Falcon web services to retrieve model data.
 import io
 import mimetypes
 import os
-import shutil
+
 import zipfile
 import falcon
-import uuid
-
-import simplejson as json
 
 from falcon import before
 from falcon import after
 
-from m4db_database.utilities_logging import get_logger
-from m4db_database.configuration import read_config_from_environ
 from m4db_database.utilities import uid_to_dir
 
 from m4db_serverside import global_vars
-from m4db_serverside.file_io.tecplot import read_tecplot
 
 from m4db_serverside.utilities.archive import unarchive_model
 
-
-def create_temporary_dir(req, resp, resource, params):
-    config = read_config_from_environ()
-    logger = get_logger()
-
-    req.working_dir = config["m4db_serverside"]["working_dir"]
-
-    req.temp_dir = os.path.join(
-        req.working_dir, str(uuid.uuid4())
-    )
-
-    os.makedirs(req.temp_dir, exist_ok=True)
-
-    logger.debug(f"created temporary directory {req.temp_dir}")
-
-
-def remove_temporary_dir(req, resp, resource):
-    logger = get_logger()
-    shutil.rmtree(req.temp_dir)
-
-    logger.debug(f"removed temporary directory {req.temp_dir}")
+from m4db_serverside.rest.m4db_readonly_web.temporary_dirs import create_temporary_dir
+from m4db_serverside.rest.m4db_readonly_web.temporary_dirs import remove_temporary_dir
 
 
 class GetAllModelDataZip:

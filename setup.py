@@ -56,6 +56,7 @@ setup(
         "m4db_serverside.scripts.m4db_run_model",
         "m4db_serverside.scripts.m4db_run_neb",
         "m4db_serverside.scripts.m4db_schedule_model",
+        "m4db_serverside.scripts.m4db_schedule_neb",
         "m4db_serverside.scripts.m4db_software",
         "m4db_serverside.scripts.m4db_user",
 
@@ -77,6 +78,7 @@ setup(
         "scripts/m4db_run_model",
         "scripts/m4db_run_neb",
         "scripts/m4db_schedule_model",
+        "scripts/m4db_schedule_neb",
         "scripts/m4db_software",
         "scripts/m4db_user",
         "scripts/m4db_neb",

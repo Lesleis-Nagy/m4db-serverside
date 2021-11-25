@@ -1,15 +1,28 @@
 from argparse import ArgumentParser
 
 
-def general_subparser(subparsers):
+def model_general_subparser(subparsers):
     r"""
-    Add a subparser to deal with the 'general' command.
+    Add a subparser to deal with the 'model-general' command.
     :param subparsers: the subparsers object.
     :return: a subparser.
     """
     subparser = subparsers.add_parser(
-        "general",
-        help="Provide general assay statistics and display them."
+        "model-general",
+        help="provide general assay statistics for models"
+    )
+    return subparser
+
+
+def neb_general_subparser(subparsers):
+    r"""
+    Add a subparser to deal with 'neb-general' command.
+    :param subparsers: the subparsers object.
+    :return: a subparser
+    """
+    subparser = subparsers.add_parser(
+        "neb-general",
+        help="provide general assay statistics for NEBs"
     )
     return subparser
 
@@ -23,6 +36,7 @@ def command_line_parser():
 
     subparsers = parser.add_subparsers(dest="command")
 
-    general_subparser_obj = general_subparser(subparsers)
+    model_general_subparser_obj = model_general_subparser(subparsers)
+    neb_general_subparser_obj = neb_general_subparser(subparsers)
 
     return parser
