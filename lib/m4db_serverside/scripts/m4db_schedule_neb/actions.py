@@ -79,11 +79,19 @@ def schedule_jobs(**kwargs):
         print()
 
     nnebs = len(neb_unique_ids)
-    if (kwargs["real_run"]):
-        print("Scheduling {} NEB(s).".format(nnebs))
-        for neb_unique_id in neb_unique_ids:
-            schedule_neb(neb_unique_id)
-            set_neb_running_status(neb_unique_id, "scheduled")
+    if kwargs["real_run"]:
+        if kwargs["limit"] > 0:
+            limit = kwargs["limit"]
+            print(f"Scheduling {limit} NEB(s)")
+            for index, neb_unique_id in enumerate(neb_unique_ids):
+                if index <= limit-1:
+                    schedule_neb(neb_unique_id)
+                    set_neb_running_status(neb_unique_id, "scheduled")
+        else:
+            print("Scheduling {} NEB(s).".format(nnebs))
+            for neb_unique_id in neb_unique_ids:
+                schedule_neb(neb_unique_id)
+                set_neb_running_status(neb_unique_id, "scheduled")
     else:
         print("{} NEB(s) found, use --real-run to schedule them for execution.".format(nnebs))
 

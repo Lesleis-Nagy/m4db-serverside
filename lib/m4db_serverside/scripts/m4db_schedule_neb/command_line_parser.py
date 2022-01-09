@@ -44,7 +44,9 @@ def command_line_parser():
                         help="actually schedule the NEBs.")
     parser.add_argument("--list-unique-ids",
                         action="store_true",
-                        help="List out the unique ids of the NEBs being scheduled.")
+                        help="list out the unique ids of the NEBs being scheduled.")
+    parser.add_argument("--limit", type=int,
+                        help="set a limit on the number of NEBs scheduled.")
 
     return parser
 

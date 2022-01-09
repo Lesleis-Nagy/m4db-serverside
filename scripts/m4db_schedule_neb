@@ -35,6 +35,10 @@ def main():
         kwargs["real_run"] = args.real_run
     if args.list_unique_ids is not None:
         kwargs["list_unique_ids"] = args.list_unique_ids
+    if args.limit is not None:
+        kwargs["limit"] = args.limit
+    else:
+        kwargs["limit"] = -1
 
     schedule_jobs(**kwargs)
 
