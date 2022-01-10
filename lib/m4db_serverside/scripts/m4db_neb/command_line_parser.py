@@ -53,7 +53,6 @@ def add_fs_path_subparser(subparsers):
     subparser.add_argument("--external-field-unit",
                            default="mT", choices=["T", "mT", "uT", "nT"],
                            help="external field unit")
-    subparser.add_argument("--force-creation", action="store_true", help="disregard warnings and create the NEB")
 
     add_common_subparser_args(subparser)
     return subparser

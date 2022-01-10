@@ -70,7 +70,6 @@ class FSNEBPathKWArgs(PathExternalFieldKWArgs):
     kw_db_user = "db_user"
     kw_software = "software"
     kw_software_version = "software_version"
-    kw_force_creation = "force"
 
     def __init__(self, **kwargs):
         # Initialize external field data.
@@ -113,10 +112,6 @@ class FSNEBPathKWArgs(PathExternalFieldKWArgs):
         self.software_version = config["m4db_serverside"]["default_micromag_software_version"]
         if FSNEBPathKWArgs.kw_software_version in kwargs.keys():
             self.software_version = kwargs[FSNEBPathKWArgs.kw_software_version]
-
-        self.force_creation = False
-        if FSNEBPathKWArgs.kw_software_version in kwargs.keys():
-            self.force_creation = kwargs[FSNEBPathKWArgs.kw_force_creation]
 
 
 class ChildNEBKWArgs(PathExternalFieldKWArgs):
@@ -195,6 +190,7 @@ class FSPathWithNEBChildKWArgs(PathExternalFieldKWArgs):
     kw_db_user = "db_user"
     kw_software = "software"
     kw_software_version = "software_version"
+    kw_force_parent = "force_parent"
 
     def __init__(self, **kwargs):
         # Initialize external field data.
@@ -249,22 +245,13 @@ class FSPathWithNEBChildKWArgs(PathExternalFieldKWArgs):
 
 def create_fs_path(session, **kwargs):
     r"""
-    Create a new parent NEB model.
+    Create a new FS NEB model parent NEB model.
     :param session: the database session object.
     :param kwargs: keyword argument parameters.
     :return: a tuple of a unique_id and a boolean which is True if the path was just created of False if it already
              existed
     """
     args = FSNEBPathKWArgs(**kwargs)
-
-    unique_id = parent_path_with_models_exists(session, args.model_unique_id_one, args.model_unique_id_two)
-
-    if unique_id is not None:
-        # If the user is *NOT* forcing creation of the path then return the existing path.
-        if not args.force_creation:
-            # The path already exists so no model was created.
-            print(f"FS path already exists, with {unique_id}")
-            return unique_id, False
 
     # If the user is adding an external field
     if args.ext_field_complete:
