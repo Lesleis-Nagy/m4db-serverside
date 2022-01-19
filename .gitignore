@@ -8,6 +8,7 @@ __pycache__
 .DS_Store
 dist
 _build
+*.egg-info
 
 ############################
 # Files                    #
