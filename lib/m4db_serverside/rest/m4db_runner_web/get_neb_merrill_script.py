@@ -44,13 +44,23 @@ def runner_data_with_parent(neb):
         "strength": 0.0,
         "x": -1.0,
         "y": -1.0,
-        "z": -1.0
+        "z": -1.0,
+        "unit": "muT"
     }
     if neb.external_field:
+
+        if neb.external_field.unit.symbol == "uT":
+            unit_symbol = "muT"
+        elif neb.external_field.unit_symbol == "mT":
+            unit_symbol = "mT"
+        else:
+            unit_symbol = "T"
+
         runner_data["external_field"]["strength"] = neb.external_field.magnitude
         runner_data["external_field"]["x"] = neb.external_field.dir_x
         runner_data["external_field"]["y"] = neb.external_field.dir_y
         runner_data["external_field"]["z"] = neb.external_field.dir_z
+        runner_data["external_field"]["unit"] = unit_symbol
 
     runner_data["energy_log_file"] = global_vars.energy_log_file_name
 
@@ -95,13 +105,23 @@ def runner_data_without_parent(neb):
         "strength": 0.0,
         "x": -1.0,
         "y": -1.0,
-        "z": -1.0
+        "z": -1.0,
+        "unit": "muT"
     }
     if neb.external_field:
+
+        if neb.external_field.unit.symbol == "uT":
+            unit_symbol = "muT"
+        elif neb.external_field.unit_symbol == "mT":
+            unit_symbol = "mT"
+        else:
+            unit_symbol = "T"
+
         runner_data["external_field"]["strength"] = neb.external_field.magnitude
         runner_data["external_field"]["x"] = neb.external_field.dir_x
         runner_data["external_field"]["y"] = neb.external_field.dir_y
         runner_data["external_field"]["z"] = neb.external_field.dir_z
+        runner_data["external_field"]["unit"] = unit_symbol
 
     # Start and end models.
     runner_data["start_magnetization"] = os.path.join(

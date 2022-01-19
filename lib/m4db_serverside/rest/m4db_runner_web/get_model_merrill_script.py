@@ -89,13 +89,23 @@ class GetModelMerrillScript:
             "strength": 0.0,
             "x": -1.0,
             "y": -1.0,
-            "z": -1.0
+            "z": -1.0,
+            "unit": "muT"
         }
         if model.external_field:
+
+            if model.external_field.unit.symbol == "uT":
+                unit_symbol = "muT"
+            elif model.external_field.unit_symbol == "mT":
+                unit_symbol = "mT"
+            else:
+                unit_symbol = "T"
+
             runner_data["external_field"]["strength"] = model.external_field.magnitude
             runner_data["external_field"]["x"] = model.external_field.dir_x
             runner_data["external_field"]["y"] = model.external_field.dir_y
             runner_data["external_field"]["z"] = model.external_field.dir_z
+            runner_data["external_field"]["unit"] = unit_symbol
 
         runner_data["output"] = global_vars.magnetization_output_file_name
 
