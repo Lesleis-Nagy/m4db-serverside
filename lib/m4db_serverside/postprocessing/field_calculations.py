@@ -30,7 +30,7 @@ def pathIdNameADM(pathId):
     return 'adm_{}'.format(pathId)
 
 
-def tec_to_unstructured_grid(absFileName, title=None, adm_fun='0.5*(1-(({M}.iHat)^4 + ({M}.jHat)^4 + ({M}.kHat)^4))'):
+def tec_to_unstructured_grid(absFileName, title=None, adm_fun='0.5*(1-(dot({M},iHat)^4 + dot({M},jHat)^4 + dot({M},kHat)^4))'):
     tec_raw = read_tecplot(absFileName)
 
     mag = None
@@ -117,7 +117,7 @@ def tec_to_unstructured_grid(absFileName, title=None, adm_fun='0.5*(1-(({M}.iHat
     helicity.AddVectorArrayName(mag_name)
     helicity.AddVectorArrayName(vort_name)
     helicity.SetResultArrayName(hel_name)
-    helicity.SetFunction('{}.{}'.format(mag_name, vort_name))
+    helicity.SetFunction('dot({},{})'.format(mag_name, vort_name))
     helicity.SetInputData(vorticity.GetOutput())
     helicity.Update()
 
@@ -138,7 +138,7 @@ def tec_to_unstructured_grid(absFileName, title=None, adm_fun='0.5*(1-(({M}.iHat
     rel_helicity.AddVectorArrayName(mag_name)
     rel_helicity.AddVectorArrayName(vort_name)
     rel_helicity.SetResultArrayName(rel_hel_name)
-    rel_helicity.SetFunction("({V:}.{M:})/(mag({V:})*mag({M:}))".format(V=vort_name, M=mag_name))
+    rel_helicity.SetFunction("dot({V:},{M:})/(mag({V:})*mag({M:}))".format(V=vort_name, M=mag_name))
     rel_helicity.SetInputData(vorticity.GetOutput())
     rel_helicity.Update()
 
